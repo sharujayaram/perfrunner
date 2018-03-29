@@ -1,0 +1,111 @@
+---
+- hosts: pool
+  any_errors_fatal: true
+  become: yes
+
+  tasks:
+  - name: DEPS | Create centos user
+    user: name=centos createhome=yes
+
+  - name: DEPS | install epel-release
+    yum: pkg=epel-release state=latest
+
+  - name: DEPS | install ntp
+    yum: pkg=ntp state=latest
+
+  - name: DEPS | install git
+    yum: pkg=git state=latest
+
+  - name: DEPS | install ngrep
+    yum: pkg=ngrep state=latest
+
+  - name: DEPS | install bc
+    yum: pkg=bc state=latest
+
+  - name: DEPS | install lsof
+    yum: pkg=lsof state=latest
+
+  - name: DEPS | install screen
+    yum: pkg=screen state=latest
+
+  - name: DEPS | install emacs
+    yum: pkg=emacs-nox state=latest
+
+  - name: DEPS | install jq JSON tool
+    yum: pkg=jq state=latest
+
+  - name: DEPS | install wget
+    yum: pkg=wget state=latest
+
+  - name: DEPS | install graphviz
+    yum: pkg=graphviz state=latest
+
+  - name: DEPS | install sysstat
+    yum: pkg=sysstat state=latest
+
+  - name: DEPS | install mlocate
+    yum: pkg=mlocate state=latest
+
+  - name: DEPS | install the 'Development tools' package group
+    yum: name="@Development tools" state=present
+
+  - name: DEPS | install python-devel
+    yum: pkg=python-devel state=latest
+
+  - name: DEPS | install pip
+    yum: pkg=python-pip state=latest
+
+  - name: DEPS | install nginx
+    yum: pkg=nginx state=latest
+
+  - name: DEPS | install psutil
+    shell: pip install psutil
+    # Remove go, can cause issues with version confusion if multple versions of go are on a machine
+
+  - name: DEPS | delete existing go installations
+    file: path=/usr/local/go state=absent
+    ignore_errors: yes
+
+  - name: DEPS | download golang
+    get_url: url=https://storage.googleapis.com/golang/go1.7.3.linux-amd64.tar.gz dest=/tmp mode=0440
+
+  - name: DEPS | extract go
+    unarchive: src=/tmp/go1.7.3.linux-amd64.tar.gz dest=/usr/local copy=no
+
+  - name: DEPS | symlink go into /usr/bin
+    file: src=/usr/local/go/bin/go dest=/usr/bin/go owner=centos group=centos state=link
+
+  - name: DEPS | symlink godoc into /usr/bin
+    file: src=/usr/local/go/bin/godoc dest=/usr/bin/godoc owner=centos group=centos state=link
+
+  - name: DEPS | symlink gofmt into /usr/bin
+    file: src=/usr/local/go/bin/gofmt dest=/usr/bin/gofmt owner=centos group=centos state=link
+
+  - name: DEPS | create GOPATH directory
+    shell: mkdir -p /opt/go
+
+  - name: DEPS | chown GOPATH to be owned by centos user
+    file: path=/opt/go owner=centos group=centos recurse=yes
+
+  - name: DEPS | raise max file descriptors
+    copy: src=files/security-nofiles-limit.conf dest=/etc/security/limits.d/20-nofiles.conf owner=root group=root mode=0644
+
+  - name: DEPS | install repo tool
+    get_url: url=https://storage.googleapis.com/git-repo-downloads/repo dest=/usr/bin/repo mode=0751
+
+  - name: DEPS | download awslogs fowarder
+    get_url: url=https://s3.amazonaws.com/aws-cloudwatch/downloads/latest/awslogs-agent-setup.py dest=/home/centos
+
+  - name: DEPS | upload default awslogs forwarder config
+    copy: src=files/awslogs_default.conf dest=/home/centos owner=centos group=centos
+
+  - name: DEPS | install awslogs forwarder service
+    shell: python awslogs-agent-setup.py --non-interactive --region us-east-1 --configfile /home/centos/awslogs_default.conf
+    args:
+      chdir: /home/centos
+
+
+
+
+
+  

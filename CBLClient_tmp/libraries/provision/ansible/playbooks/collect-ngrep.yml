@@ -1,0 +1,15 @@
+---
+- hosts: sync_gateways:sg_accels
+  any_errors_fatal: false
+  become: yes
+
+  tasks:
+
+  - name: NGREP | fetch ngrep packet capture from loopback device
+    fetch: src=/tmp/ngrep_lo.txt dest=/tmp/sys-logs/ngrep_lo_{{ inventory_hostname }}
+
+  - name: NGREP | fetch ngrep packet capture from eth0 device
+    fetch: src=/tmp/ngrep_eth0.txt dest=/tmp/sys-logs/ngrep_eth0_{{ inventory_hostname }}
+
+  - name: NGREP | fetch ngrep packet capture from eth1 device
+    fetch: src=/tmp/ngrep_eth1.txt dest=/tmp/sys-logs/ngrep_eth1_{{ inventory_hostname }}

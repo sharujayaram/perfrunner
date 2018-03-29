@@ -1,0 +1,21 @@
+---
+- hosts: sync_gateways
+  any_errors_fatal: true
+  become: yes
+  # Fetch generated profile results
+  tasks:
+  - name: SYNC GATEWAY | Fetch sync gateway profile
+    fetch: src=/tmp/sync_gateway_profile.tar.gz dest=/tmp/sync_gateway_profile/{{ inventory_hostname }}/ fail_on_missing=yes flat=yes
+  - name: Tell user where to find the profile data
+    debug: msg="Profile data has been saved in /tmp/sync_gateway_profile.tar.gz"
+
+- hosts: sg_accels
+  any_errors_fatal: true
+  become: yes
+  # Fetch generated profile results on sg_accels
+  tasks:
+  - name: SG ACCEL | Fetch sg accel profile
+    fetch: src=/tmp/sync_gateway_profile.tar.gz dest=/tmp/sync_gateway_profile/{{ inventory_hostname }}/ fail_on_missing=yes flat=yes
+  - name: Tell user where to find the profile data
+    debug: msg="Profile data has been saved in /tmp/sync_gateway_profile.tar.gz"
+

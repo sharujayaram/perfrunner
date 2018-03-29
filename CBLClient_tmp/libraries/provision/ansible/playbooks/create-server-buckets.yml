@@ -1,0 +1,49 @@
+# ssh wait hopefully to resolve intermittent ssh failures
+- name: Wait for port 8091 to be ready
+  hosts: couchbase_servers
+  gather_facts: False
+  tasks:
+  - wait_for: port=8091
+
+- hosts: couchbase_servers
+  any_errors_fatal: true
+  become: true
+  vars:
+
+  # Primary node
+    couchbase_server_primary_node: "{{ hostvars['cb1']['ansible_host'] }}"
+
+    # Current node
+    couchbase_server_node: "{{ hostvars[inventory_hostname]['ansible_host'] }}"
+
+    couchbase_server_home_path: /opt/couchbase
+    couchbase_server_admin_port: 8091
+    couchbase_server_admin: Administrator
+    couchbase_server_password: password
+
+    couchbase_server_bucket_type: couchbase
+    couchbase_server_bucket_replica: 1
+
+    bucket_names:
+    bucket_num: "{{ (bucket_names|count) }}"
+
+    # 512 is dedicated to query
+    couchbase_server_cluster_ram: "{{ ((ansible_memtotal_mb|int)*0.8)|int - 512 }}"
+    couchbase_server_bucket_ram: "{{ ((couchbase_server_cluster_ram|int)/(bucket_num|int))|int }}"
+
+  tasks:
+
+  - debug: msg={{ couchbase_server_primary_node }}
+  - debug: msg="bucket_names {{ bucket_names }}"
+  - debug: msg="bucket_num {{ bucket_num }}"
+  - debug: msg="Memtotal MB RAM {{ ansible_memtotal_mb }}"
+  - debug: msg="Couchbase cluster RAM {{ couchbase_server_cluster_ram }}"
+  - debug: msg="Couchbase bucket RAM {{ couchbase_server_bucket_ram }}"
+
+  # Create buckets and wait
+  - name: COUCHBASE SERVER | Create new buckets
+    shell: "{{ couchbase_server_home_path }}/bin/couchbase-cli bucket-create --cluster={{ couchbase_server_primary_node }}:{{ couchbase_server_admin_port }} --user={{ couchbase_server_admin }} --password={{ couchbase_server_password }} --bucket={{ item }} --bucket-type={{ couchbase_server_bucket_type }} --bucket-ramsize={{ couchbase_server_bucket_ram }} --bucket-replica={{ couchbase_server_bucket_replica }} --wait"
+    with_items: "{{ bucket_names }}"
+    when: couchbase_server_node == couchbase_server_primary_node
+
+

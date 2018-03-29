@@ -1,0 +1,10 @@
+---
+- hosts: load_generators
+  any_errors_fatal: true
+  tasks:
+  - name: GATELOAD | Kill gateload screen
+    shell: screen -X -S gateload kill
+  - name: GATELOAD | Kill gateload_expvars screen
+    shell: screen -X -S gateload_expvars kill
+
+    
