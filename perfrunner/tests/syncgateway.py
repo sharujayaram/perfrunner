@@ -1,6 +1,7 @@
 import os
 import shutil
 import glob
+import time
 
 from perfrunner.helpers.cbmonitor import with_stats
 from perfrunner.tests import PerfTest
@@ -157,3 +158,16 @@ class SGWrite(SGPerfTest):
         self.reporter.post(
             *self.metrics.sg_throughput("Throughput (req/sec), POST doc")
         )
+
+
+class CBLReplication(SGPerfTest):
+    def run(self):
+        self.run_test()
+        self.report_kpi()
+
+    @with_stats
+    def run_test(self):
+        time.sleep(600)
+
+    def _report_kpi(self):
+        pass
