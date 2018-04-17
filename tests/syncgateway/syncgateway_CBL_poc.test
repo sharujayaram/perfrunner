@@ -1,5 +1,5 @@
 [test_case]
-test = perfrunner.tests.syncgateway.SGRead
+test = perfrunner.tests.syncgateway.CBLReplication
 title = 1 node, 1M docs, 1K users, 1 channel
 component = syncgateway
 category = read

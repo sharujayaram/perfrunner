@@ -167,7 +167,7 @@ class CBLReplication(SGPerfTest):
 
     @with_stats
     def run_test(self):
-        time.sleep(600)
+        time.sleep(1200)
 
     def _report_kpi(self):
         pass
