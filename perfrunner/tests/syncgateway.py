@@ -2,6 +2,7 @@ import os
 import shutil
 import glob
 import copy
+import time
 
 from perfrunner.helpers.cbmonitor import with_stats
 from perfrunner.tests import PerfTest
@@ -107,10 +108,11 @@ class SGPerfTest(PerfTest):
     def run(self):
         self.download_ycsb()
         self.start_memcached()
-        self.load_users()
+      #  self.load_users()
         self.load_docs()
-        self.init_users()
-        self.grant_access()
+     #   self.init_users()
+     #   self.grant_access()
+        time.sleep(300)
         self.run_test()
         self.report_kpi()
 
