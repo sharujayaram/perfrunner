@@ -33,7 +33,7 @@ GRANT_ACCESS_CMD = " run syncgateway -s -P {workload} -p recordcount={total_docs
                  "-p exportfile={exportfile} -p syncgateway.channelspergrant={channels_per_grant} " \
                  "-p syncgateway.grantaccesstoall={grant_access}"
 
-RUN_TEST_CMD = " run syncgateway -s -P {workload} -p recordcount={total_docs} -p operationcount=999999999 " \
+RUN_TEST_CMD = " run syncgateway -s -P {workload} -p recordcount={total_docs} -p operationcount={total_docs} " \
                "-p maxexecutiontime={time} -threads {threads} -p syncgateway.host={hosts} -p syncgateway.auth={auth} " \
                "-p memcached.host={memcached_host} -p syncgateway.totalusers={total_users} " \
                "-p syncgateway.roundtrip={roundtrip} -p insertstart={insertstart} " \
