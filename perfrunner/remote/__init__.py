@@ -32,7 +32,7 @@ class Remote:
         run('mkdir -p {}'.format(worker_home))
 
         with cd(worker_home):
-            run('git clone -q {}'.format(REPO))
+            run('git clone -q -b {} {}'.format("delta_sync", REPO))
 
             with cd('perfrunner'):
                 run('make')
