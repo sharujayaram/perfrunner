@@ -403,3 +403,21 @@ def get_indexer_heap_profile(indexer: str) -> str:
 def govendor_fetch(path: str, revision: str, package: str):
     logger.info('Fetching: {} with revision {} and package as {}'.format(path, revision, package))
     local('govendor fetch {}/{}@{}'.format(path, package, revision))
+
+def replicate_push():
+    cmd = '/root/cblite/cblite/build/cblite push  ws://172.23.100.204:4985/db /Users/sharathsulochana/db.cblite2'
+    local(cmd)
+
+def replicate_pull():
+    cmd = '/root/cblite/cblite/build/cblite push  ws://172.23.100.204:4985/db /Users/sharathsulochana/db.cblite2'
+    local(cmd)
+
+def cleanup_cblite_db():
+    cmd = 'rm -rf /root/cblite/db.cblite2'
+    local(cmd)
+
+def start_cblitedb():
+    #run("./cblite/build/cblite serve  --port 4985 --create db.cblite2")
+    cmd = '/root/cblite/cblite/build/cblite serve  --port 4985 --create db.cblite2'
+    local(cmd)
+    print('run cblite serve command to setup cblite db')

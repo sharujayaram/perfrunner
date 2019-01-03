@@ -112,7 +112,6 @@ class SGPerfTest(PerfTest):
         self.load_docs()
         self.init_users()
         self.grant_access()
-        time.sleep(300)
         self.run_test()
         self.report_kpi()
 
@@ -237,3 +236,30 @@ class SGMixQueryThroughput(SGPerfTest):
             *self.metrics.sg_throughput("Throughput (req/sec)")
         )
 
+
+class DeltaSync(SGPerfTest):
+
+    def start_cblite(self):
+        local.start_cblitedb()
+
+    @with_stats
+    def cblite_replicate(self):
+        sg = self.cluster_spec.masters[0]
+        cblite = 'db.cblite2'
+        local.replicate_push()
+
+
+
+
+    def run(self):
+        self.download_ycsb()
+        self.start_cblite()
+        self.start_memcached()
+        self.load_users()
+        self.load_docs()
+        self.init_users()
+        self.grant_access()
+        self.cblite_replicate()
+        self.run_test()
+        self.cblite_replicate()
+        self.report_kpi()
