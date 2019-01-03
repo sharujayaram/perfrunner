@@ -112,7 +112,7 @@ class SGPerfTest(PerfTest):
         self.load_docs()
         self.init_users()
         self.grant_access()
-        time.sleep(300)
+        time.sleep(150)
         self.run_test()
         self.report_kpi()
 
