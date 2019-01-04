@@ -1,5 +1,5 @@
 [test_case]
-test = perfrunner.tests.syncgateway.SGWrite
+test = perfrunner.tests.syncgateway.DeltaSync
 title = DelatSync 1 node, 1M docs, 1K users, 100 channels, 10 channels per doc
 component = syncgateway
 category = write
