@@ -244,12 +244,7 @@ class DeltaSync(SGPerfTest):
 
     @with_stats
     def cblite_replicate(self):
-        sg = self.cluster_spec.masters[0]
-        cblite = 'db.cblite2'
         local.replicate_push()
-
-
-
 
     def run(self):
         self.download_ycsb()

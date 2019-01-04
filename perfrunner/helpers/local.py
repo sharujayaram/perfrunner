@@ -406,11 +406,15 @@ def govendor_fetch(path: str, revision: str, package: str):
 
 def replicate_push():
     cmd = '/root/cblite/cblite/build/cblite push  ws://172.23.100.204:4985/db /Users/sharathsulochana/db.cblite2'
-    local(cmd)
+    logger.info('Running: {}'.format(cmd))
+    with quiet():
+        local(cmd)
 
 def replicate_pull():
     cmd = '/root/cblite/cblite/build/cblite push  ws://172.23.100.204:4985/db /Users/sharathsulochana/db.cblite2'
-    local(cmd)
+    logger.info('Running: {}'.format(cmd))
+    with quiet():
+        local(cmd)
 
 def cleanup_cblite_db():
     cmd = 'rm -rf /root/cblite/db.cblite2'
@@ -419,5 +423,7 @@ def cleanup_cblite_db():
 def start_cblitedb():
     #run("./cblite/build/cblite serve  --port 4985 --create db.cblite2")
     cmd = '/root/cblite/cblite/build/cblite serve  --port 4985 --create db.cblite2'
-    local(cmd)
+    logger.info('Running: {}'.format(cmd))
+    with lcd('/root/'):
+        local(cmd)
     print('run cblite serve command to setup cblite db')
