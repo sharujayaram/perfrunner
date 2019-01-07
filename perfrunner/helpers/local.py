@@ -411,7 +411,7 @@ def replicate_push():
         local(cmd)
 
 def replicate_pull():
-    cmd = '/root/cblite/cblite/build/cblite push  ws://172.23.100.204:4985/db /root/db.cblite2'
+    cmd = '/root/cblite/cblite/build/cblite pull  ws://172.23.100.204:4985/db /root/db.cblite2'
     logger.info('Running: {}'.format(cmd))
     with quiet():
         local(cmd)

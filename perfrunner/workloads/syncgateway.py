@@ -63,8 +63,12 @@ def syncgateway_load_users(workload_settings: PhaseSettings, timer: int, worker_
     sgs = workload_settings.syncgateway_settings
     log_file_name = "{}_loadusers_{}.log".format(sgs.log_title, worker_id)
     res_file_name = "{}_loadusers_{}.result".format(sgs.log_title, worker_id)
+    if sgs.replication_type == 'PULL':
+        phosts = '172.23.100.194'
+    else:
+        phosts = get_hosts(cluster, workload_settings)
     params = LOAD_USERS_CMD.format(workload=sgs.workload,
-                                   hosts=get_hosts(cluster, workload_settings),
+                                   hosts=phosts,
                                    memcached_host=cluster.workers[0],
                                    total_users=sgs.users,
                                    total_channels=sgs.channels,
@@ -81,8 +85,12 @@ def syncgateway_load_docs(workload_settings: PhaseSettings, timer: int, worker_i
     sgs = workload_settings.syncgateway_settings
     log_file_name = "{}_loaddocs_{}.log".format(sgs.log_title, worker_id)
     res_file_name = "{}_loaddocs_{}.result".format(sgs.log_title, worker_id)
+    if sgs.replication_type == 'PULL':
+        phosts = '172.23.100.194'
+    else:
+        phosts = get_hosts(cluster, workload_settings)
     params = LOAD_DOCS_CMD.format(workload=sgs.workload,
-                                  hosts=get_hosts(cluster, workload_settings),
+                                  hosts=phosts,
                                   total_docs=sgs.documents,
                                   memcached_host=cluster.workers[0],
                                   total_users=sgs.users,
@@ -99,8 +107,12 @@ def syncgateway_init_users(workload_settings: PhaseSettings, timer: int, worker_
     sgs = workload_settings.syncgateway_settings
     log_file_name = "{}_initusers_{}.log".format(sgs.log_title, worker_id)
     res_file_name = "{}_initusers_{}.result".format(sgs.log_title, worker_id)
+    if sgs.replication_type == 'PULL':
+        phosts = '172.23.100.194'
+    else:
+        phosts = get_hosts(cluster, workload_settings)
     params = INIT_USERS_CMD.format(workload=sgs.workload,
-                                  hosts=get_hosts(cluster, workload_settings),
+                                  hosts=phosts,
                                   total_docs=sgs.documents,
                                   memcached_host=cluster.workers[0],
                                   auth=sgs.auth,
@@ -117,8 +129,12 @@ def syncgateway_grant_access(workload_settings: PhaseSettings, timer: int, worke
     sgs = workload_settings.syncgateway_settings
     log_file_name = "{}_grantaccess_{}.log".format(sgs.log_title, worker_id)
     res_file_name = "{}_grantaccess_{}.result".format(sgs.log_title, worker_id)
+    if sgs.replication_type == 'PULL':
+        phosts = '172.23.100.194'
+    else:
+        phosts = get_hosts(cluster, workload_settings)
     params = GRANT_ACCESS_CMD.format(workload=sgs.workload,
-                                     hosts=get_hosts(cluster, workload_settings),
+                                     hosts=phosts,
                                      total_docs=sgs.documents,
                                      memcached_host=cluster.workers[0],
                                      auth=sgs.auth,
@@ -138,8 +154,12 @@ def syncgateway_run_test(workload_settings: PhaseSettings, timer: int, worker_id
     sgs = workload_settings.syncgateway_settings
     log_file_name = "{}_runtest_{}.log".format(sgs.log_title, worker_id)
     res_file_name = "{}_runtest_{}.result".format(sgs.log_title, worker_id)
+    if sgs.replication_type == 'PULL':
+        phosts = '172.23.100.194'
+    else:
+        phosts = get_hosts(cluster, workload_settings)
     params = RUN_TEST_CMD.format(workload=sgs.workload,
-                                 hosts=get_hosts(cluster, workload_settings),
+                                 hosts=phosts,
                                  total_docs=sgs.documents_workset,
                                  memcached_host=cluster.workers[0],
                                  auth=sgs.auth,
