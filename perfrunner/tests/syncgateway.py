@@ -16,6 +16,8 @@ from typing import Callable
 
 from logger import logger
 
+from decorator import decorator
+
 from perfrunner.helpers.memcached import MemcachedHelper
 from perfrunner.helpers.metrics import MetricHelper
 from perfrunner.helpers.misc import pretty_dict
@@ -29,6 +31,17 @@ from perfrunner.settings import (
     TargetIterator,
     TestConfig,
 )
+
+
+@decorator
+def with_timer(cblite_replicate, *args, **kwargs):
+    test = args[0]
+
+    t0 = time.time()
+
+    cblite_replicate(*args, **kwargs)
+
+    test.replicate_time = time.time() - t0  # Delta Sync time in seconds
 
 
 class SGPerfTest(PerfTest):
@@ -243,8 +256,22 @@ class DeltaSync(SGPerfTest):
         local.start_cblitedb()
 
     @with_stats
+    @with_timer
     def cblite_replicate(self):
-        local.replicate_push()
+        if self.test_config.syncgateway_settings.replication_type == 'PUSH':
+            local.replicate_push()
+        elif self.test_config.syncgateway_settings.replication_type == 'PULL':
+            local.replicate_pull()
+
+    def _report_kpi(self):
+        self.collect_execution_logs()
+        for f in glob.glob('{}/*runtest*.result'.format(self.LOCAL_DIR)):
+            with open(f, 'r') as fout:
+                logger.info(f)
+                logger.info(fout.read())
+        self.reporter.post(
+        )
+
 
     def run(self):
         self.download_ycsb()
@@ -255,6 +282,8 @@ class DeltaSync(SGPerfTest):
         self.init_users()
         self.grant_access()
         self.cblite_replicate()
+        print('replication time', self.replicate_time)
         self.run_test()
         self.cblite_replicate()
+        print('replication time', self.replicate_time)
         self.report_kpi()

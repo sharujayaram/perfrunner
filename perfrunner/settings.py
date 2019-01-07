@@ -756,6 +756,7 @@ class SyncgatewaySettings:
     GRANT_ACCESS = "false"
     GRANT_ACCESS_IN_SCAN = "false"
     CHANNELS_PER_GRANT = 1
+    REPLICATION_TYPE = 'PUSH'
 
     def __init__(self, options: dict):
         self.repo = options.get('ycsb_repo', self.REPO)
@@ -791,6 +792,7 @@ class SyncgatewaySettings:
         self.channels_per_grant = options.get('channels_per_grant', self.CHANNELS_PER_GRANT)
         self.grant_access_in_scan = options.get('grant_access_in_scan', self.GRANT_ACCESS_IN_SCAN)
         self.build_label = options.get('build_label', '')
+        self.replication_type = options.get('replication_type', self.REPLICATION_TYPE)
 
 
 
