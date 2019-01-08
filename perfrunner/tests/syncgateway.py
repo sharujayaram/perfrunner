@@ -277,7 +277,7 @@ class DeltaSync(SGPerfTest):
         self.download_ycsb()
         self.start_cblite()
         self.start_memcached()
-        self.load_users()
+    #    self.load_users()
         self.load_docs()
     #    self.init_users()
     #    self.grant_access()
