@@ -758,6 +758,7 @@ class SyncgatewaySettings:
     CHANNELS_PER_GRANT = 1
     REPLICATION_TYPE = 'PUSH'
     WRITEALLFIELDS = 'true'
+    READALLFIELDS = 'true'
 
     def __init__(self, options: dict):
         self.repo = options.get('ycsb_repo', self.REPO)
@@ -795,6 +796,7 @@ class SyncgatewaySettings:
         self.build_label = options.get('build_label', '')
         self.replication_type = options.get('replication_type', self.REPLICATION_TYPE)
         self.writeallfields = options.get('writeallfields', self.WRITEALLFIELDS)
+        self.readallfields = options.get('readallfields', self.READALLFIELDS)
 
 
     def __str__(self) -> str:
