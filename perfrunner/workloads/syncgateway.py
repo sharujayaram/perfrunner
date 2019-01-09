@@ -34,7 +34,8 @@ GRANT_ACCESS_CMD = " run syncgateway -s -P {workload} -p recordcount={total_docs
                  "-p syncgateway.grantaccesstoall={grant_access}"
 
 RUN_TEST_CMD = " run syncgateway -s -P {workload} -p recordcount={total_docs} -p operationcount={total_docs} " \
-               "-p maxexecutiontime={time} -threads {threads} -p syncgateway.host={hosts} -p syncgateway.auth={auth} " \
+               "-p maxexecutiontime={time} -threads {threads} -p writeallfields={writeallfields} " \
+               "-p syncgateway.host={hosts} -p syncgateway.auth={auth} " \
                "-p memcached.host={memcached_host} -p syncgateway.totalusers={total_users} " \
                "-p syncgateway.roundtrip={roundtrip} -p insertstart={insertstart} " \
                "-p syncgateway.readmode={read_mode} -p syncgateway.insertmode={insert_mode} " \
@@ -160,6 +161,7 @@ def syncgateway_run_test(workload_settings: PhaseSettings, timer: int, worker_id
         phosts = get_hosts(cluster, workload_settings)
     params = RUN_TEST_CMD.format(workload=sgs.workload,
                                  hosts=phosts,
+                                 writeallfields=sgs.writeallfields,
                                  total_docs=sgs.documents_workset,
                                  memcached_host=cluster.workers[0],
                                  auth=sgs.auth,
