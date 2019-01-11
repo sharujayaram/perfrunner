@@ -638,6 +638,14 @@ class MetricHelper:
 
         return time_elapsed, self._snapshots, metric_info
 
+    def deltasync_time(self, time_elapsed: float) -> Metric:
+        metric_info = self._metric_info()
+
+        time_elapsed = round(time_elapsed, 3)
+
+        return time_elapsed, self._snapshots, metric_info
+
+
     def kv_throughput(self, total_ops: int) -> Metric:
         metric_info = self._metric_info()
 

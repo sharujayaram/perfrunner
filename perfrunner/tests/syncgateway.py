@@ -263,15 +263,15 @@ class DeltaSync(SGPerfTest):
         elif self.test_config.syncgateway_settings.replication_type == 'PULL':
             local.replicate_pull()
 
-    def _report_kpi(self):
+    def _report_kpi(self, deltasync_time: float):
         self.collect_execution_logs()
         for f in glob.glob('{}/*runtest*.result'.format(self.LOCAL_DIR)):
             with open(f, 'r') as fout:
                 logger.info(f)
                 logger.info(fout.read())
         self.reporter.post(
+            *self.metrics.deltasync_time(deltasync_time)
         )
-
 
     def run(self):
         self.download_ycsb()
@@ -283,4 +283,4 @@ class DeltaSync(SGPerfTest):
         self.run_test()
         replication_time2 = self.cblite_replicate()
         print('time taken for first replication', replication_time2)
-        self.report_kpi()
+        self.report_kpi(replication_time2)
