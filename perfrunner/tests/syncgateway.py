@@ -273,6 +273,14 @@ class DeltaSync(SGPerfTest):
             *self.metrics.deltasync_time(deltasync_time)
         )
 
+    def db_cleanup(self):
+        local.cleanup_cblite_db()
+
+    def publish_stats(self):
+        server = self.cluster_spec.masters[0]
+        stats = self.rest.deltsync_stats(server)
+        print(stats)
+
     def run(self):
         self.download_ycsb()
         self.start_cblite()
@@ -282,5 +290,7 @@ class DeltaSync(SGPerfTest):
         print('time taken for first replication', replication_time)
         self.run_test()
         replication_time2 = self.cblite_replicate()
-        print('time taken for first replication', replication_time2)
+        print('time taken for delta replication', replication_time2)
+      #  self.db_cleanup()
         self.report_kpi(replication_time2)
+        self.publish_stats()

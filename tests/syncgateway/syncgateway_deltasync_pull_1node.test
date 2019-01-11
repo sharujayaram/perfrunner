@@ -45,3 +45,6 @@ requestdistribution = zipfian
 log_title = sync_gateway_1node_writes
 replication_type = PULL
 writeallfields = false
+
+[deltasync]
+updatecount = 1

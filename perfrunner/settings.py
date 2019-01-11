@@ -446,6 +446,9 @@ class PhaseSettings:
 
         # Syncgateway settings
         self.syncgateway_settings = None
+        
+        #deltasync settinf
+        self.deltasync_settings = None
 
         # YCSB settings
         self.workload_path = options.get('workload_path')
@@ -799,6 +802,14 @@ class SyncgatewaySettings:
         self.readallfields = options.get('readallfields', self.READALLFIELDS)
 
 
+class DeltaSyncSettings:
+
+    UPDATECOUNT = 1
+
+    def __init__(self, options: dict):
+        self.UPDATECOUNT = options.get('channels', self.updatecount)
+
+
     def __str__(self) -> str:
         return str(self.__dict_)
 
@@ -963,6 +974,12 @@ class TestConfig(Config):
     def syncgateway_settings(self) -> SyncgatewaySettings:
         options = self._get_options_as_dict('syncgateway')
         return SyncgatewaySettings(options)
+
+    @property
+    def deltasync_settings(self) -> DeltaSyncSettings:
+        options = self._get_options_as_dict('deltasync')
+        return DeltaSyncSettings(options)
+
 
 
 class TargetSettings:
