@@ -446,7 +446,7 @@ class PhaseSettings:
 
         # Syncgateway settings
         self.syncgateway_settings = None
-        
+
         #deltasync settinf
         self.deltasync_settings = None
 
@@ -807,7 +807,7 @@ class DeltaSyncSettings:
     UPDATECOUNT = 1
 
     def __init__(self, options: dict):
-        self.UPDATECOUNT = options.get('channels', self.updatecount)
+        self.updatecount = options.get('updatecount', self.UPDATECOUNT)
 
 
     def __str__(self) -> str:
