@@ -801,6 +801,9 @@ class SyncgatewaySettings:
         self.writeallfields = options.get('writeallfields', self.WRITEALLFIELDS)
         self.readallfields = options.get('readallfields', self.READALLFIELDS)
 
+    def __str__(self) -> str:
+        return str(self.__dict_)
+
 
 class DeltaSyncSettings:
 
@@ -809,10 +812,8 @@ class DeltaSyncSettings:
     def __init__(self, options: dict):
         self.updatecount = options.get('updatecount', self.UPDATECOUNT)
 
-
     def __str__(self) -> str:
         return str(self.__dict_)
-
 
 class TestConfig(Config):
 
