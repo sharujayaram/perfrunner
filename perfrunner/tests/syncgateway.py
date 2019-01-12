@@ -277,8 +277,8 @@ class DeltaSync(SGPerfTest):
         local.cleanup_cblite_db()
 
     def publish_stats(self):
-        server = self.cluster_spec.masters[0]
-        stats = self.rest.deltsync_stats(server)
+        sg_server = self.cluster_spec.servers[0]
+        stats = self.rest.deltsync_stats(sg_server)
         print(stats)
 
     def run(self):
