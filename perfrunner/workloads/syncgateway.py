@@ -41,7 +41,7 @@ RUN_TEST_CMD = " run syncgateway -s -P {workload} -p recordcount={total_docs} -p
                "-p syncgateway.readmode={read_mode} -p syncgateway.insertmode={insert_mode} " \
                "-p syncgateway.sequencestart={sequence_start} -p syncgateway.initusers=false " \
                "-p readproportion={readproportion} -p updateproportion={updateproportion} " \
-               "-p scanproportion={scanproportion}  -p deltasync.updatecount={updatecount}"\
+               "-p scanproportion={scanproportion}  -p syncgateway.updatefieldcount={updatefieldcount}"\
                "-p insertproportion={insertproportion} -p exportfile={exportfile} " \
                "-p syncgateway.feedmode={feedmode} -p syncgateway.grantaccessinscan={grant_access_in_scan}"
 
@@ -141,7 +141,7 @@ def syncgateway_grant_access(workload_settings: PhaseSettings, timer: int, worke
                                      auth=sgs.auth,
                                      total_users=sgs.users,
                                      insertstart=get_offset(workload_settings, worker_id),
-                                     sequence_start = int(sgs.users) + int(sgs.documents) + 1,
+                                     sequence_start=int(sgs.users) + int(sgs.documents) + 1,
                                      exportfile=res_file_name,
                                      grant_access=sgs.grant_access,
                                      channels_per_grant=sgs.channels_per_grant)
@@ -153,7 +153,6 @@ def syncgateway_grant_access(workload_settings: PhaseSettings, timer: int, worke
 
 def syncgateway_run_test(workload_settings: PhaseSettings, timer: int, worker_id: int, cluster: ClusterSpec):
     sgs = workload_settings.syncgateway_settings
-    dss = workload_settings.deltasync_settings
     log_file_name = "{}_runtest_{}.log".format(sgs.log_title, worker_id)
     res_file_name = "{}_runtest_{}.result".format(sgs.log_title, worker_id)
     if sgs.replication_type == 'PULL':
@@ -179,7 +178,7 @@ def syncgateway_run_test(workload_settings: PhaseSettings, timer: int, worker_id
                                  updateproportion=sgs.updateproportion,
                                  insertproportion=sgs.insertproportion,
                                  scanproportion=sgs.scanproportion,
-                                 updatecount=dss.updatecount,
+                                 updatefieldcount=sgs.updatefieldcount,
                                  exportfile=res_file_name,
                                  feedmode=sgs.feed_mode,
                                  grant_access_in_scan=sgs.grant_access_in_scan)

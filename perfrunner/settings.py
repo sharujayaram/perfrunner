@@ -447,9 +447,6 @@ class PhaseSettings:
         # Syncgateway settings
         self.syncgateway_settings = None
 
-        #deltasync settinf
-        self.deltasync_settings = None
-
         # YCSB settings
         self.workload_path = options.get('workload_path')
         self.recorded_load_cache_size = int(options.get('recorded_load_cache_size',
@@ -762,6 +759,7 @@ class SyncgatewaySettings:
     REPLICATION_TYPE = 'PUSH'
     WRITEALLFIELDS = 'true'
     READALLFIELDS = 'true'
+    UPDATEFIELDCOUNT = 1
 
     def __init__(self, options: dict):
         self.repo = options.get('ycsb_repo', self.REPO)
@@ -800,17 +798,7 @@ class SyncgatewaySettings:
         self.replication_type = options.get('replication_type', self.REPLICATION_TYPE)
         self.writeallfields = options.get('writeallfields', self.WRITEALLFIELDS)
         self.readallfields = options.get('readallfields', self.READALLFIELDS)
-
-    def __str__(self) -> str:
-        return str(self.__dict_)
-
-
-class DeltaSyncSettings:
-
-    UPDATECOUNT = 1
-
-    def __init__(self, options: dict):
-        self.updatecount = options.get('updatecount', self.UPDATECOUNT)
+        self.updatefieldcount = options.get('updatefieldcount', self.UPDATEFIELDCOUNT)
 
     def __str__(self) -> str:
         return str(self.__dict_)
@@ -975,13 +963,6 @@ class TestConfig(Config):
     def syncgateway_settings(self) -> SyncgatewaySettings:
         options = self._get_options_as_dict('syncgateway')
         return SyncgatewaySettings(options)
-
-    @property
-    def deltasync_settings(self) -> DeltaSyncSettings:
-        options = self._get_options_as_dict('deltasync')
-        return DeltaSyncSettings(options)
-
-
 
 class TargetSettings:
 
