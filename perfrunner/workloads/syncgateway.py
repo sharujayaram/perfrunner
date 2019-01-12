@@ -41,7 +41,7 @@ RUN_TEST_CMD = " run syncgateway -s -P {workload} -p recordcount={total_docs} -p
                "-p syncgateway.readmode={read_mode} -p syncgateway.insertmode={insert_mode} " \
                "-p syncgateway.sequencestart={sequence_start} -p syncgateway.initusers=false " \
                "-p readproportion={readproportion} -p updateproportion={updateproportion} " \
-               "-p scanproportion={scanproportion}  -p syncgateway.updatefieldcount={updatefieldcount}"\
+               "-p scanproportion={scanproportion}  -p syncgateway.updatefieldcount={updatefieldcount} " \
                "-p insertproportion={insertproportion} -p exportfile={exportfile} " \
                "-p syncgateway.feedmode={feedmode} -p syncgateway.grantaccessinscan={grant_access_in_scan}"
 
