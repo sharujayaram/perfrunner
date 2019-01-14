@@ -405,13 +405,13 @@ def govendor_fetch(path: str, revision: str, package: str):
     local('govendor fetch {}/{}@{}'.format(path, package, revision))
 
 def replicate_push():
-    cmd = '/root/cblite/cblite/build/cblite push  ws://172.23.100.204:4985/db /root/db.cblite2'
+    cmd = '/root/cblite/cblite/build/cblite push /root/db.cblite2 ws://172.23.100.204:4985/db'
     logger.info('Running: {}'.format(cmd))
     with quiet():
         local(cmd)
 
 def replicate_pull():
-    cmd = '/root/cblite/cblite/build/cblite pull  ws://172.23.100.204:4985/db /root/db.cblite2'
+    cmd = '/root/cblite/cblite/build/cblite pull /root/db.cblite2 ws://172.23.100.204:4985/db'
     logger.info('Running: {}'.format(cmd))
     with quiet():
         local(cmd)
