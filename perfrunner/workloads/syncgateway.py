@@ -64,7 +64,7 @@ def syncgateway_load_users(workload_settings: PhaseSettings, timer: int, worker_
     sgs = workload_settings.syncgateway_settings
     log_file_name = "{}_loadusers_{}.log".format(sgs.log_title, worker_id)
     res_file_name = "{}_loadusers_{}.result".format(sgs.log_title, worker_id)
-    if sgs.replication_type == 'PULL':
+    if sgs.replication_type == 'PUSH':
         phosts = '172.23.100.194'
     else:
         phosts = get_hosts(cluster, workload_settings)
@@ -86,7 +86,7 @@ def syncgateway_load_docs(workload_settings: PhaseSettings, timer: int, worker_i
     sgs = workload_settings.syncgateway_settings
     log_file_name = "{}_loaddocs_{}.log".format(sgs.log_title, worker_id)
     res_file_name = "{}_loaddocs_{}.result".format(sgs.log_title, worker_id)
-    if sgs.replication_type == 'PULL':
+    if sgs.replication_type == 'PUSH':
         phosts = '172.23.100.194'
     else:
         phosts = get_hosts(cluster, workload_settings)
@@ -108,7 +108,7 @@ def syncgateway_init_users(workload_settings: PhaseSettings, timer: int, worker_
     sgs = workload_settings.syncgateway_settings
     log_file_name = "{}_initusers_{}.log".format(sgs.log_title, worker_id)
     res_file_name = "{}_initusers_{}.result".format(sgs.log_title, worker_id)
-    if sgs.replication_type == 'PULL':
+    if sgs.replication_type == 'PUSH':
         phosts = '172.23.100.194'
     else:
         phosts = get_hosts(cluster, workload_settings)
@@ -130,7 +130,7 @@ def syncgateway_grant_access(workload_settings: PhaseSettings, timer: int, worke
     sgs = workload_settings.syncgateway_settings
     log_file_name = "{}_grantaccess_{}.log".format(sgs.log_title, worker_id)
     res_file_name = "{}_grantaccess_{}.result".format(sgs.log_title, worker_id)
-    if sgs.replication_type == 'PULL':
+    if sgs.replication_type == 'PUSH':
         phosts = '172.23.100.194'
     else:
         phosts = get_hosts(cluster, workload_settings)
@@ -155,7 +155,7 @@ def syncgateway_run_test(workload_settings: PhaseSettings, timer: int, worker_id
     sgs = workload_settings.syncgateway_settings
     log_file_name = "{}_runtest_{}.log".format(sgs.log_title, worker_id)
     res_file_name = "{}_runtest_{}.result".format(sgs.log_title, worker_id)
-    if sgs.replication_type == 'PULL':
+    if sgs.replication_type == 'PUSH':
         phosts = '172.23.100.194'
     else:
         phosts = get_hosts(cluster, workload_settings)
