@@ -389,3 +389,13 @@ class Monitor(RestHelper):
             retry += 1
         if retry == self.MAX_RETRY:
             logger.info('Failed to bootstrap function: {}'.format(function))
+
+
+    def deltasync_stats(self, host: str):
+        stats = self.get_expvar_stats(host)
+        if stats['syncgateway']['per_db']['db']['delta_sync']:
+
+            return stats['syncgateway']['per_db']['db']['cbl_replication_push'], \
+                   stats['syncgateway']['per_db']['db']['cbl_replication_pull']
+        else:
+            return 'Delta Sync Disabled'

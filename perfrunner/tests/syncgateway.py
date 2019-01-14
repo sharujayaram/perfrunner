@@ -24,6 +24,8 @@ from perfrunner.helpers.misc import pretty_dict
 from perfrunner.helpers.remote import RemoteHelper
 from perfrunner.helpers.reporter import ShowFastReporter
 from perfrunner.helpers.worker import  WorkerManager
+#from perfrunner.helpers.rest import RestHelper
+from perfrunner.helpers.monitor import Monitor
 
 from perfrunner.settings import (
     ClusterSpec,
@@ -67,6 +69,8 @@ class SGPerfTest(PerfTest):
             self.worker_manager = WorkerManager(cluster_spec, test_config, verbose)
         self.settings = self.test_config.access_settings
         self.settings.syncgateway_settings = self.test_config.syncgateway_settings
+     #   self.rest = RestHelper
+        self.monitor = self.monitor = Monitor(cluster_spec, test_config, verbose)
 
     def download_ycsb(self):
         if self.worker_manager.is_remote:
@@ -276,10 +280,12 @@ class DeltaSync(SGPerfTest):
     def db_cleanup(self):
         local.cleanup_cblite_db()
 
-    def publish_stats(self):
+    def post_deltastats(self):
         sg_server = self.cluster_spec.servers[0]
-        stats = self.rest.deltsync_stats(sg_server)
-        print(stats)
+        print(sg_server)
+        stats1, stats2 = self.monitor.deltasync_stats(host=sg_server)
+        print('push stats:', stats1)
+        print('pull stats : ', stats2)
 
     def run(self):
         self.download_ycsb()
@@ -291,6 +297,6 @@ class DeltaSync(SGPerfTest):
         self.run_test()
         replication_time2 = self.cblite_replicate()
         print('time taken for delta replication', replication_time2)
-      #  self.db_cleanup()
+        self.db_cleanup()
         self.report_kpi(replication_time2)
-        self.publish_stats()
+        self.post_deltastats()

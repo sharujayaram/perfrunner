@@ -678,3 +678,7 @@ class RestHelper:
 
         api = 'http://{}:{}/getDeployedApps'.format(node, EVENTING_PORT)
         return self.get(url=api).json()
+
+    def get_expvar_stats(self, host: str) -> dict:
+        api = 'http://{}:4985/_expvar'.format(host)
+        return self.get(url=api).json()
