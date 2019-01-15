@@ -408,13 +408,13 @@ def replicate_push():
     cmd = '/root/cblite/cblite/build/cblite push /root/db.cblite2 ws://172.23.100.204:4985/db'
     logger.info('Running: {}'.format(cmd))
     with quiet():
-        local(cmd)
+        return local(cmd, capture=True)
 
 def replicate_pull():
     cmd = '/root/cblite/cblite/build/cblite pull /root/db.cblite2 ws://172.23.100.204:4985/db'
     logger.info('Running: {}'.format(cmd))
     with quiet():
-        local(cmd)
+        return local(cmd, capture=True)
 
 def cleanup_cblite_db():
     cmd = 'rm -rf /root/cblite/db.cblite2'
@@ -426,3 +426,12 @@ def start_cblitedb():
     with lcd('/root/'):
         local(cmd)
     print('run cblite serve command to setup cblite db')
+
+def clone_cblite():
+    cmd = 'git clone https://github.com/couchbaselabs/cblite'
+    local(cmd)
+
+def build_cblite():
+    cmd = 'CC=clang CXX=clang++ ./build.sh'
+    with lcd('/root/cblite/cblite/'):
+        local(cmd)

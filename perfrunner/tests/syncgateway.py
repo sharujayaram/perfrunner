@@ -3,6 +3,7 @@ import shutil
 import glob
 import copy
 import time
+import re
 
 from perfrunner.helpers.cbmonitor import with_stats, timeit
 from perfrunner.tests import PerfTest
@@ -260,12 +261,21 @@ class DeltaSync(SGPerfTest):
         local.start_cblitedb()
 
     @with_stats
-    @timeit
     def cblite_replicate(self):
         if self.test_config.syncgateway_settings.replication_type == 'PUSH':
-            local.replicate_push()
+            str = local.replicate_push()
         elif self.test_config.syncgateway_settings.replication_type == 'PULL':
-            local.replicate_pull()
+            str = local.replicate_pull()
+
+        if str.find('Completed'):
+            replicationTime = float((re.search('docs in (.*) secs;', str)).group(1))
+            docsReplicated = int((re.search('Completed (.*) docs in', str)).group(1))
+            successCode = 'SUCCESS'
+        else:
+            replicationTime = 0
+            docsReplicated = 0
+            successCode = 'FAILED'
+        return replicationTime, docsReplicated, successCode
 
     def _report_kpi(self, deltasync_time: float):
         self.collect_execution_logs()
@@ -282,21 +292,20 @@ class DeltaSync(SGPerfTest):
 
     def post_deltastats(self):
         sg_server = self.cluster_spec.servers[0]
-        print(sg_server)
-        stats1, stats2 = self.monitor.deltasync_stats(host=sg_server)
-        print('push stats:', stats1)
-        print('pull stats : ', stats2)
+        stats = self.monitor.deltasync_stats(host=sg_server)
+        print('push stats:', stats)
 
     def run(self):
         self.download_ycsb()
         self.start_cblite()
         self.start_memcached()
         self.load_docs()
-        replication_time = self.cblite_replicate()
-        print('time taken for first replication', replication_time)
+        self.cblite_replicate()
         self.run_test()
-        replication_time2 = self.cblite_replicate()
-        print('time taken for delta replication', replication_time2)
-        self.db_cleanup()
-        self.report_kpi(replication_time2)
-        self.post_deltastats()
+        replicationTime, docsReplicated, successCode = self.cblite_replicate()
+        if successCode == 'SUCCESS':
+            self.report_kpi(replicationTime)
+            self.post_deltastats()
+        #    self.db_cleanup()
+        #else:
+        #    self.db_cleanup()
