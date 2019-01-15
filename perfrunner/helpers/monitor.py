@@ -394,7 +394,7 @@ class Monitor(RestHelper):
     def deltasync_stats(self, host: str):
         stats = self.get_expvar_stats(host)
         if 'delta_sync' in stats['syncgateway']['per_db']['db'].keys():
-            return stats['syncgateway']['per_db']['db']['cbl_replication_push']
+            return stats['syncgateway']['per_db']['db']
         else:
             print('Delta Sync Disabled')
             return stats['syncgateway']['per_db']

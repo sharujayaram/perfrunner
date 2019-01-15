@@ -293,7 +293,7 @@ class DeltaSync(SGPerfTest):
     def post_deltastats(self):
         sg_server = self.cluster_spec.servers[0]
         stats = self.monitor.deltasync_stats(host=sg_server)
-        print('push stats:', stats)
+        print('Sync-gateway Stats:', stats)
 
     def run(self):
         self.download_ycsb()
@@ -301,6 +301,7 @@ class DeltaSync(SGPerfTest):
         self.start_memcached()
         self.load_docs()
         self.cblite_replicate()
+        self.post_deltastats()
         self.run_test()
         replicationTime, docsReplicated, successCode = self.cblite_replicate()
         if successCode == 'SUCCESS':
