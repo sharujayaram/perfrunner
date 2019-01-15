@@ -10,7 +10,7 @@ LOAD_USERS_CMD = " load syncgateway -s -P {workload} -p syncgateway.loadmode=use
                  "-p syncgateway.channels={total_channels} -p syncgateway.channelsperuser={channels_per_user} " \
                  "-p insertstart={insertstart} -p exportfile={exportfile} -p syncgateway.starchannel={starchannel}"
 
-LOAD_DOCS_CMD = " load syncgateway -s -P {workload} -p recordcount={total_docs} -threads 50 " \
+LOAD_DOCS_CMD = " load syncgateway -s -P {workload} -p recordcount={total_docs} -threads {threads} " \
                 "-p syncgateway.host={hosts} -p syncgateway.auth=false " \
                 "-p memcached.host={memcached_host} -p syncgateway.totalusers={total_users} " \
                 "-p syncgateway.channels={total_channels} -p syncgateway.channelsperuser={channels_per_user} " \
@@ -92,6 +92,7 @@ def syncgateway_load_docs(workload_settings: PhaseSettings, timer: int, worker_i
         phosts = get_hosts(cluster, workload_settings)
     params = LOAD_DOCS_CMD.format(workload=sgs.workload,
                                   hosts=phosts,
+                                  threads=sgs.threads_per_instance,
                                   total_docs=sgs.documents,
                                   memcached_host=cluster.workers[0],
                                   total_users=sgs.users,
