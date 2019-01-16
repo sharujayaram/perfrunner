@@ -268,10 +268,12 @@ class DeltaSync(SGPerfTest):
             str = local.replicate_pull()
 
         if str.find('Completed'):
+            print('cblite message:', str)
             replicationTime = float((re.search('docs in (.*) secs;', str)).group(1))
             docsReplicated = int((re.search('Completed (.*) docs in', str)).group(1))
             successCode = 'SUCCESS'
         else:
+            print('cblite failed with error message:', str)
             replicationTime = 0
             docsReplicated = 0
             successCode = 'FAILED'
