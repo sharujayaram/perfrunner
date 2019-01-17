@@ -760,6 +760,8 @@ class SyncgatewaySettings:
     WRITEALLFIELDS = 'true'
     READALLFIELDS = 'true'
     UPDATEFIELDCOUNT = 1
+    FIELDCOUNT = 10
+    FIELDLENGTH = 100
 
     def __init__(self, options: dict):
         self.repo = options.get('ycsb_repo', self.REPO)
@@ -799,6 +801,8 @@ class SyncgatewaySettings:
         self.writeallfields = options.get('writeallfields', self.WRITEALLFIELDS)
         self.readallfields = options.get('readallfields', self.READALLFIELDS)
         self.updatefieldcount = options.get('updatefieldcount', self.UPDATEFIELDCOUNT)
+        self.fieldcount = options.get('fieldcount', self.FIELDCOUNT)
+        self.fieldlength = options.get('fieldlength', self.FIELDLENGTH)
 
     def __str__(self) -> str:
         return str(self.__dict_)
