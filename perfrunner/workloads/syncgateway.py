@@ -96,7 +96,7 @@ def syncgateway_load_docs(workload_settings: PhaseSettings, timer: int, worker_i
                                   hosts=phosts,
                                   threads=sgs.threads_per_instance,
                                   total_docs=sgs.documents,
-                                  fieldlength=sgs.fieldlenght,
+                                  fieldlength=sgs.fieldlength,
                                   fieldcount=sgs.fieldcount,
                                   memcached_host=cluster.workers[0],
                                   total_users=sgs.users,
