@@ -10,7 +10,7 @@ LOAD_USERS_CMD = " load syncgateway -s -P {workload} -p syncgateway.loadmode=use
                  "-p syncgateway.channels={total_channels} -p syncgateway.channelsperuser={channels_per_user} " \
                  "-p insertstart={insertstart} -p exportfile={exportfile} -p syncgateway.starchannel={starchannel}"
 
-LOAD_DOCS_CMD = " load syncgateway -s -P {workload} -p recordcount={total_docs} -p fieldcount={fieldcount}" \
+LOAD_DOCS_CMD = " load syncgateway -s -P {workload} -p recordcount={total_docs} -p fieldcount={fieldcount} " \
                 "-p fieldlength={fieldlength} -threads {threads} " \
                 "-p syncgateway.host={hosts} -p syncgateway.auth=false " \
                 "-p memcached.host={memcached_host} -p syncgateway.totalusers={total_users} " \
