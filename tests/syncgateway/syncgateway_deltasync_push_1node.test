@@ -1,9 +1,9 @@
 [test_case]
 test = perfrunner.tests.syncgateway.DeltaSync
-title = DelatSync 1 node, 1M docs, 1K users, 100 channels, 10 channels per doc
+title = DelatSync 1 node, 1M docs, 1K users
 component = syncgateway
-category = write
-sub_category = xattr
+category = replicate
+sub_category = push
 
 [cluster]
 mem_quota = 25000
@@ -32,6 +32,7 @@ channels = 1
 channels_per_user = 1
 channels_per_doc = 1
 documents = 1000000
+documents_workset = 1000000
 roundtrip_write = false
 feed_reading_mode = idsonly
 insert_mode = bykey
@@ -43,3 +44,4 @@ requestdistribution = zipfian
 log_title = sync_gateway_1node_writes
 replication_type = PUSH
 writeallfields = false
+updatefieldcount = 1

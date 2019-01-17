@@ -1,9 +1,9 @@
 [test_case]
 test = perfrunner.tests.syncgateway.DeltaSync
-title = DelatSync Pull 1 node, 1M docs, 1K users, 100 channels, 10 channels per doc
+title = DelatSync Pull 1 node, 1M docs, 1K size
 component = syncgateway
-category = write
-sub_category = xattr
+category = replicate
+sub_category = pull
 
 [cluster]
 mem_quota = 25000
@@ -45,3 +45,4 @@ requestdistribution = zipfian
 log_title = sync_gateway_1node_writes
 replication_type = PULL
 writeallfields = false
+updatefieldcount = 1

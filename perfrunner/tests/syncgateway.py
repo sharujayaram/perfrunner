@@ -309,6 +309,6 @@ class DeltaSync(SGPerfTest):
         if successCode == 'SUCCESS':
             self.report_kpi(replicationTime)
             self.post_deltastats()
-        #    self.db_cleanup()
-        #else:
-        #    self.db_cleanup()
+            self.db_cleanup()
+        else:
+            self.db_cleanup()
