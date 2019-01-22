@@ -1,6 +1,6 @@
 [test_case]
 test = perfrunner.tests.syncgateway.DeltaSync
-title = DelatSync-OFF PUSH 1 node, 100K docs, 10 fields, 1K size
+title = Replication Time (secs) deltasync-off 1 node, 1000 docs, 10 fields, 1.5K docSize
 component = syncgateway
 category = replicate
 sub_category = Push
@@ -31,8 +31,8 @@ users = 1000
 channels = 1
 channels_per_user = 1
 channels_per_doc = 1
-documents = 100000
-documents_workset = 100000
+documents = 1000
+documents_workset = 1000
 roundtrip_write = false
 feed_reading_mode = idsonly
 insert_mode = bykey
