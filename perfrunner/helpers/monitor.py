@@ -398,3 +398,12 @@ class Monitor(RestHelper):
         else:
             print('Delta Sync Disabled')
             return stats['syncgateway']['per_db']
+
+    def deltasync_bytes_transfer(self, host: str):
+        stats = self.get_expvar_stats(host)
+        bytes_transeferred = 0
+        if self.test_config.syncgateway_settings.replication_type == 'PUSH':
+            bytes_transeferred = float(stats['syncgateway']['per_db']['db']['database']['doc_writes_bytes_blip'])
+        if self.test_config.syncgateway_settings.replication_type == 'PULL':
+            bytes_transeferred = float(stats['syncgateway']['per_db']['db']['database']['doc_reads_bytes_blip'])
+        return bytes_transeferred

@@ -297,6 +297,15 @@ class DeltaSync(SGPerfTest):
         stats = self.monitor.deltasync_stats(host=sg_server)
         print('Sync-gateway Stats:', stats)
 
+    def calc_bandwidth_usage(self, bytes: float, timetaken: float):
+        bandwidth = round(((bytes/timetaken)/1024), 2) #in kb
+        return bandwidth
+
+    def get_bytes_transfer(self):
+        sg_server = self.cluster_spec.servers[0]
+        bytes_transfered = self.monitor.deltasync_bytes_transfer(host=sg_server)
+        return bytes_transfered
+
     def run(self):
         self.download_ycsb()
         self.start_cblite()
@@ -304,11 +313,15 @@ class DeltaSync(SGPerfTest):
         self.load_docs()
         self.cblite_replicate()
         self.post_deltastats()
+        bytes_transfered_1 = self.get_bytes_transfer()
         self.run_test()
         replicationTime, docsReplicated, successCode = self.cblite_replicate()
         if successCode == 'SUCCESS':
-            self.report_kpi(replicationTime)
             self.post_deltastats()
+            bytes_transfered_2 = self.get_bytes_transfer()
+            byte_transfer = bytes_transfered_2 - bytes_transfered_1
+            bandwidth = self.calc_bandwidth_usage(bytes=byte_transfer, timetaken=replicationTime)
+            self.report_kpi(bandwidth)
             self.db_cleanup()
         else:
             self.db_cleanup()
