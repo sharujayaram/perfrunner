@@ -8,6 +8,7 @@ import numpy as np
 from cbagent.stores import PerfStore
 from logger import logger
 from perfrunner.settings import StatsSettings
+from configparser import ConfigParser
 
 Number = Union[float, int]
 
@@ -638,13 +639,28 @@ class MetricHelper:
 
         return time_elapsed, self._snapshots, metric_info
 
-    def deltasync_time(self, time_elapsed: float) -> Metric:
-        metric_info = self._metric_info()
+    def deltasync_time(self, replicationTime: float) -> Metric:
 
-        time_elapsed = round(time_elapsed, 3)
+        title = 'Time Taken (Sec) {}'.format(self._title)
+        metric_id = '{}_{}'.format(self.test_config.name, "time")
+        metric_info = self._metric_info(title=title, metric_id=metric_id)
+        replicationTime = round(replicationTime, 3)
+        return replicationTime, self._snapshots, metric_info
 
-        return time_elapsed, self._snapshots, metric_info
+    def deltasync_throughput(self, throughput: int) -> Metric:
 
+        title = 'Throughput (docs/sec) {}'.format(self._title)
+        metric_id = '{}_{}'.format(self.test_config.name, "throughput")
+        metric_info = self._metric_info(title=title, metric_id=metric_id)
+
+        return throughput, self._snapshots, metric_info
+
+    def deltasync_bandwidth(self, bandwidth: float) -> Metric:
+
+        title = 'Bandwidth Usage (MB/Sec) {}'.format(self._title)
+        metric_id = '{}_{}'.format(self.test_config.name, "bandwidth")
+        metric_info = self._metric_info(title=title, metric_id=metric_id)
+        return bandwidth, self._snapshots, metric_info
 
     def kv_throughput(self, total_ops: int) -> Metric:
         metric_info = self._metric_info()
