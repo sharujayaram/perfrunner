@@ -1,6 +1,6 @@
 [test_case]
 test = perfrunner.tests.syncgateway.DeltaSync
-title = deltasync-off 1 node, 100K docs, 10 fields, 1.5K docSize
+title = , 1 node, 100K docs, 10 fields, 1.5K docSize, deltasync-off
 component = syncgateway
 category = replicate
 sub_category = Pull

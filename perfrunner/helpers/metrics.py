@@ -641,7 +641,7 @@ class MetricHelper:
 
     def deltasync_time(self, replicationTime: float) -> Metric:
 
-        title = 'Time Taken (Sec) {}'.format(self._title)
+        title = 'Replication time (sec) {}'.format(self._title)
         metric_id = '{}_{}'.format(self.test_config.name, "time")
         metric_info = self._metric_info(title=title, metric_id=metric_id)
         replicationTime = round(replicationTime, 3)
@@ -657,7 +657,7 @@ class MetricHelper:
 
     def deltasync_bandwidth(self, bandwidth: float) -> Metric:
 
-        title = 'Bandwidth Usage (MB/Sec) {}'.format(self._title)
+        title = 'Bandwidth Usage (MB/sec) {}'.format(self._title)
         metric_id = '{}_{}'.format(self.test_config.name, "bandwidth")
         metric_info = self._metric_info(title=title, metric_id=metric_id)
         return bandwidth, self._snapshots, metric_info

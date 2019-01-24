@@ -257,15 +257,15 @@ class SGMixQueryThroughput(SGPerfTest):
 
 class DeltaSync(SGPerfTest):
 
-    def start_cblite(self):
-        local.start_cblitedb()
+    def start_cblite(self, port: str, db_name: str):
+        local.start_cblitedb(port=port, db_name=db_name)
 
     @with_stats
-    def cblite_replicate(self):
+    def cblite_replicate(self, cblite_db: str):
         if self.test_config.syncgateway_settings.replication_type == 'PUSH':
-            str = local.replicate_push()
+            str = local.replicate_push(cblite_db=cblite_db)
         elif self.test_config.syncgateway_settings.replication_type == 'PULL':
-            str = local.replicate_pull()
+            str = local.replicate_pull(cblite_db=cblite_db)
 
         if str.find('Completed'):
             print('cblite message:', str)
@@ -316,14 +316,31 @@ class DeltaSync(SGPerfTest):
 
     def run(self):
         self.download_ycsb()
-        self.start_cblite()
+
+        if self.test_config.syncgateway_settings.deltasync_cachehit_ratio == 100:
+            self.start_cblite(self, port='4985', db_name='db1')
+            self.start_cblite(self, port='4986', db_name='db2')
+        else:
+            self.start_cblite(self, port='4985', db_name='db1')
         self.start_memcached()
         self.load_docs()
-        self.cblite_replicate()
+
+        if self.test_config.syncgateway_settings.deltasync_cachehit_ratio == 100:
+            self.cblite_replicate(self, cblite_db='db1')
+            self.cblite_replicate(self, cblite_db='db2')
+        else:
+            self.cblite_replicate(self, cblite_db='db1')
         self.post_deltastats()
-        bytes_transfered_1 = self.get_bytes_transfer()
         self.run_test()
-        replicationTime, docsReplicated, successCode = self.cblite_replicate()
+
+        if self.test_config.syncgateway_settings.deltasync_cachehit_ratio == 100:
+            self.cblite_replicate(self, cblite_db='db1')
+            bytes_transfered_1 = self.get_bytes_transfer()
+            replicationTime, docsReplicated, successCode = self.cblite_replicate(self, cblite_db='db2')
+        else:
+            bytes_transfered_1 = self.get_bytes_transfer()
+            replicationTime, docsReplicated, successCode = self.cblite_replicate(self, cblite_db='db1')
+
         if successCode == 'SUCCESS':
             self.post_deltastats()
             bytes_transfered_2 = self.get_bytes_transfer()

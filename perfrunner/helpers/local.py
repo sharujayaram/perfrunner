@@ -404,26 +404,29 @@ def govendor_fetch(path: str, revision: str, package: str):
     logger.info('Fetching: {} with revision {} and package as {}'.format(path, revision, package))
     local('govendor fetch {}/{}@{}'.format(path, package, revision))
 
-def replicate_push():
-    cmd = '/root/cblite/cblite/build/cblite push --user guest:guest /root/cblite/db.cblite2 ws://172.23.100.204:4984/db'
+def replicate_push(cblite_db: str):
+    cmd = '/root/cblite/cblite/build/cblite push --user guest:guest /root/cblite/{}.cblite2 ' \
+          'ws://172.23.100.204:4984/db'.format(cblite_db)
     logger.info('Running: {}'.format(cmd))
     with quiet():
         return local(cmd, capture=True)
 
-def replicate_pull():
-    cmd = '/root/cblite/cblite/build/cblite pull --user guest:guest /root/cblite/db.cblite2 ws://172.23.100.204:4984/db'
+def replicate_pull(cblite_db: str):
+    cmd = '/root/cblite/cblite/build/cblite pull --user guest:guest /root/cblite/{}.cblite2 ' \
+          'ws://172.23.100.204:4984/db'.format(cblite_db)
     logger.info('Running: {}'.format(cmd))
     with quiet():
         return local(cmd, capture=True)
 
 def cleanup_cblite_db():
     print("cleaning up cblite db")
-    cmd = 'rm -rf db.cblite2'
+    cmd = 'rm -rf db*'
     with lcd('/root/cblite/'):
         local(cmd)
 
-def start_cblitedb():
-    cmd = 'nohup /root/cblite/cblite/build/cblite serve --port 4985 --create db.cblite2 &>/dev/null &'
+def start_cblitedb(port: str, db_name: str):
+    cmd = 'nohup /root/cblite/cblite/build/cblite serve --port' \
+          ' {} --create {}.cblite2 &>/dev/null &'.format(db_name, port)
     logger.info('Running: {}'.format(cmd))
     with lcd('/root/cblite/'):
         local(cmd)
