@@ -321,7 +321,7 @@ class DeltaSync(SGPerfTest):
             self.start_cblite(port='4985', db_name='db1')
             self.start_cblite(port='4986', db_name='db2')
         else:
-            self.start_cblite(port='4985', db_name='db1')
+            self.start_cblite(port='4985', db_name='db')
         self.start_memcached()
         self.load_docs()
 
@@ -329,7 +329,7 @@ class DeltaSync(SGPerfTest):
             self.cblite_replicate(cblite_db='db1')
             self.cblite_replicate(cblite_db='db2')
         else:
-            self.cblite_replicate(cblite_db='db1')
+            self.cblite_replicate(cblite_db='db')
         self.post_deltastats()
         self.run_test()
 
@@ -339,7 +339,7 @@ class DeltaSync(SGPerfTest):
             replicationTime, docsReplicated, successCode = self.cblite_replicate(cblite_db='db2')
         else:
             bytes_transfered_1 = self.get_bytes_transfer()
-            replicationTime, docsReplicated, successCode = self.cblite_replicate(cblite_db='db1')
+            replicationTime, docsReplicated, successCode = self.cblite_replicate(cblite_db='db')
 
         if successCode == 'SUCCESS':
             self.post_deltastats()
