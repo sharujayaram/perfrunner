@@ -426,7 +426,7 @@ def cleanup_cblite_db():
 
 def start_cblitedb(port: str, db_name: str):
     cmd = 'nohup /root/cblite/cblite/build/cblite serve --port' \
-          ' {} --create {}.cblite2 &>/dev/null &'.format(db_name, port)
+          ' {} --create {}.cblite2 &>/dev/null &'.format(port, db_name)
     logger.info('Running: {}'.format(cmd))
     with lcd('/root/cblite/'):
         local(cmd)
