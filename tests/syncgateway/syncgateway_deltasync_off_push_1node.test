@@ -22,8 +22,8 @@ indexer.settings.storage_mode = memory_optimized
 [syncgateway]
 nodes = 1
 threads = 1
-clients = 1
-instances_per_client = 1
+clients = 4
+instances_per_client = 5
 workload_path = workloads/syncgateway_blank
 ycsb_repo = git://github.com/sharujayaram/YCSB.git
 ycsb_branch = syncgateway-weekly
