@@ -643,7 +643,7 @@ class MetricHelper:
 
         title = 'Replication time (sec) {}'.format(self._title)
         metric_id = '{}_{}'.format(self.test_config.name, "time")
-        metric_info = self._metric_info(title=title, metric_id=metric_id)
+        metric_info = self._metric_info(title=title, metric_id=metric_id, order_by='00003')
         replicationTime = round(replicationTime, 3)
         return replicationTime, self._snapshots, metric_info
 
@@ -651,7 +651,7 @@ class MetricHelper:
 
         title = 'Throughput (docs/sec) {}'.format(self._title)
         metric_id = '{}_{}'.format(self.test_config.name, "throughput")
-        metric_info = self._metric_info(title=title, metric_id=metric_id)
+        metric_info = self._metric_info(title=title, metric_id=metric_id, order_by='00002')
 
         return throughput, self._snapshots, metric_info
 
@@ -659,7 +659,7 @@ class MetricHelper:
 
         title = 'Bandwidth Usage (MB/sec) {}'.format(self._title)
         metric_id = '{}_{}'.format(self.test_config.name, "bandwidth")
-        metric_info = self._metric_info(title=title, metric_id=metric_id)
+        metric_info = self._metric_info(title=title, metric_id=metric_id, order_by='00001')
         return bandwidth, self._snapshots, metric_info
 
     def kv_throughput(self, total_ops: int) -> Metric:
