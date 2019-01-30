@@ -271,9 +271,13 @@ class DeltaSync(SGPerfTest):
             print('cblite message:', str)
             replicationTime = float((re.search('docs in (.*) secs;', str)).group(1))
             docsReplicated = int((re.search('Completed (.*) docs in', str)).group(1))
-            successCode = 'SUCCESS'
+            if docsReplicated==self.test_config.syncgateway_settings.documents:
+                successCode = 'SUCCESS'
+            else:
+                successCode = 'FAILED'
+                print("Replication failed due to partial replication . Number of docs replicated: ", docsReplicated)
         else:
-            print('cblite failed with error message:', str)
+            print('Replication failed with error message:', str)
             replicationTime = 0
             docsReplicated = 0
             successCode = 'FAILED'
