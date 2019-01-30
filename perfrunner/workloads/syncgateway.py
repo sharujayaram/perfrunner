@@ -11,7 +11,8 @@ LOAD_USERS_CMD = " load syncgateway -s -P {workload} -p syncgateway.loadmode=use
                  "-p insertstart={insertstart} -p exportfile={exportfile} -p syncgateway.starchannel={starchannel}"
 
 LOAD_DOCS_CMD = " load syncgateway -s -P {workload} -p recordcount={total_docs} -p fieldcount={fieldcount} " \
-                "-p fieldlength={fieldlength} -threads {threads} " \
+                "-p fieldlength={fieldlength} -p syncgateway.doctype={doctype} " \
+                "-p syncgateway.doc_depth={doc_depth} -threads {threads} " \
                 "-p syncgateway.host={hosts} -p syncgateway.auth=false " \
                 "-p memcached.host={memcached_host} -p syncgateway.totalusers={total_users} " \
                 "-p syncgateway.channels={total_channels} -p syncgateway.channelsperuser={channels_per_user} " \
@@ -37,6 +38,7 @@ GRANT_ACCESS_CMD = " run syncgateway -s -P {workload} -p recordcount={total_docs
 RUN_TEST_CMD = " run syncgateway -s -P {workload} -p recordcount={total_docs} -p operationcount={total_docs} " \
                "-p fieldcount={fieldcount} -p maxexecutiontime={time} -threads {threads} " \
                "-p writeallfields={writeallfields} -p fieldlength={fieldlength} " \
+               "-p syncgateway.doctype={doctype} -p syncgateway.doc_depth={doc_depth} " \
                "-p readallfields={readallfields} -p syncgateway.host={hosts} -p syncgateway.auth={auth} " \
                "-p memcached.host={memcached_host} -p syncgateway.totalusers={total_users} " \
                "-p syncgateway.roundtrip={roundtrip} -p insertstart={insertstart} " \
@@ -98,6 +100,8 @@ def syncgateway_load_docs(workload_settings: PhaseSettings, timer: int, worker_i
                                   total_docs=sgs.documents,
                                   fieldlength=sgs.fieldlength,
                                   fieldcount=sgs.fieldcount,
+                                  doctype=sgs.doctype,
+                                  doc_depth=sgs.doc_depth,
                                   memcached_host=cluster.workers[0],
                                   total_users=sgs.users,
                                   total_channels=sgs.channels,
@@ -170,6 +174,8 @@ def syncgateway_run_test(workload_settings: PhaseSettings, timer: int, worker_id
                                  readallfields=sgs.readallfields,
                                  fieldlength=sgs.fieldlength,
                                  fieldcount=sgs.fieldcount,
+                                 doctype=sgs.doctype,
+                                 doc_depth=sgs.doc_depth,
                                  total_docs=sgs.documents_workset,
                                  memcached_host=cluster.workers[0],
                                  auth=sgs.auth,

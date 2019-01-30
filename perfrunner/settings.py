@@ -782,6 +782,8 @@ class SyncgatewaySettings:
     FIELDCOUNT = 10
     FIELDLENGTH = 100
     DELTASYNC_CACHEHIT_RATIO = 0
+    DOCTYPE = 'simple'
+    DOC_DEPTH = '1'
 
     def __init__(self, options: dict):
         self.repo = options.get('ycsb_repo', self.REPO)
@@ -824,6 +826,8 @@ class SyncgatewaySettings:
         self.fieldcount = options.get('fieldcount', self.FIELDCOUNT)
         self.fieldlength = options.get('fieldlength', self.FIELDLENGTH)
         self.deltasync_cachehit_ratio = options.get('deltasync_cachehit_ratio', self.DELTASYNC_CACHEHIT_RATIO)
+        self.doctype = options.get('doctype', self.DOCTYPE)
+        self.doc_depth = options.get('doc_depth', self.DOC_DEPTH)
 
     def __str__(self) -> str:
         return str(self.__dict_)
