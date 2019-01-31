@@ -46,4 +46,3 @@ replication_type = PULL
 writeallfields = false
 updatefieldcount = 1
 fieldlength = 1000000
-deltasync_cachehit_ratio = 100
