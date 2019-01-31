@@ -271,7 +271,7 @@ class DeltaSync(SGPerfTest):
             print('cblite message:', str)
             replicationTime = float((re.search('docs in (.*) secs;', str)).group(1))
             docsReplicated = int((re.search('Completed (.*) docs in', str)).group(1))
-            if docsReplicated==self.test_config.syncgateway_settings.documents:
+            if docsReplicated == self.test_config.syncgateway_settings.documents:
                 successCode = 'SUCCESS'
             else:
                 successCode = 'FAILED'
