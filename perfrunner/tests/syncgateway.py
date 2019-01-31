@@ -283,7 +283,7 @@ class DeltaSync(SGPerfTest):
             successCode = 'FAILED'
         return replicationTime, docsReplicated, successCode
 
-    def _report_kpi(self, replicationTime: float, throughput: int, bandwidth: float):
+    def _report_kpi(self, replicationTime: float, throughput: int, bandwidth: float, bytes: float):
         self.collect_execution_logs()
         for f in glob.glob('{}/*runtest*.result'.format(self.LOCAL_DIR)):
             with open(f, 'r') as fout:
@@ -298,7 +298,7 @@ class DeltaSync(SGPerfTest):
         )
 
         self.reporter.post(
-            *self.metrics.deltasync_bandwidth(bandwidth=bandwidth)
+            *self.metrics.deltasync_bytes(bytes=bytes)
         )
 
     def db_cleanup(self):
@@ -351,7 +351,7 @@ class DeltaSync(SGPerfTest):
             byte_transfer = bytes_transfered_2 - bytes_transfered_1
             bandwidth = self.calc_bandwidth_usage(bytes=byte_transfer, timetaken=replicationTime)
             throughput = int(docsReplicated/replicationTime)
-            self.report_kpi(replicationTime, throughput, bandwidth)
+            self.report_kpi(replicationTime, throughput, bandwidth, byte_transfer)
             self.db_cleanup()
         else:
             self.db_cleanup()

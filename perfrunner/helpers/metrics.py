@@ -643,7 +643,8 @@ class MetricHelper:
 
         title = 'Replication time (sec) {}'.format(self._title)
         metric_id = '{}_{}'.format(self.test_config.name, "time")
-        metric_info = self._metric_info(title=title, metric_id=metric_id, order_by='00003')
+        order_by = '00000003' + str(len(title))
+        metric_info = self._metric_info(title=title, metric_id=metric_id, order_by=order_by)
         replicationTime = round(replicationTime, 3)
         return replicationTime, self._snapshots, metric_info
 
@@ -651,7 +652,8 @@ class MetricHelper:
 
         title = 'Throughput (docs/sec) {}'.format(self._title)
         metric_id = '{}_{}'.format(self.test_config.name, "throughput")
-        metric_info = self._metric_info(title=title, metric_id=metric_id, order_by='00002')
+        order_by = '000002' + str(len(title))
+        metric_info = self._metric_info(title=title, metric_id=metric_id, order_by=order_by)
 
         return throughput, self._snapshots, metric_info
 
@@ -659,8 +661,18 @@ class MetricHelper:
 
         title = 'Bandwidth Usage (MB/sec) {}'.format(self._title)
         metric_id = '{}_{}'.format(self.test_config.name, "bandwidth")
-        metric_info = self._metric_info(title=title, metric_id=metric_id, order_by='00001')
+        order_by = '000000004'+str(len(title))
+        metric_info = self._metric_info(title=title, metric_id=metric_id, order_by=order_by)
         return bandwidth, self._snapshots, metric_info
+
+    def deltasync_bytes(self, bytes: float) -> Metric:
+
+        title = 'Bytes Transfer (MB) {}'.format(self._title)
+        metric_id = '{}_{}'.format(self.test_config.name, "Mbytes")
+        order_by = '00001'+str(len(title))
+        metric_info = self._metric_info(title=title, metric_id=metric_id, order_by=order_by)
+        bytes = ((bytes/1024)/1024)  #in MB
+        return bytes, self._snapshots, metric_info
 
     def kv_throughput(self, total_ops: int) -> Metric:
         metric_info = self._metric_info()
