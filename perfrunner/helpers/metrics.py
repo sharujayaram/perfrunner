@@ -671,7 +671,7 @@ class MetricHelper:
         metric_id = '{}_{}'.format(self.test_config.name, "Mbytes")
         order_by = '00001'+str(len(title))
         metric_info = self._metric_info(title=title, metric_id=metric_id, order_by=order_by)
-        bytes = ((bytes/1024)/1024)  #in MB
+        bytes = round(((bytes/1024)/1024), 2)  #in MB
         return bytes, self._snapshots, metric_info
 
     def kv_throughput(self, total_ops: int) -> Metric:
