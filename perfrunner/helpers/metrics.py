@@ -639,37 +639,37 @@ class MetricHelper:
 
         return time_elapsed, self._snapshots, metric_info
 
-    def deltasync_time(self, replicationTime: float, docsReplicated: int) -> Metric:
+    def deltasync_time(self, replicationTime: float, field_length: str) -> Metric:
 
         title = 'Replication time (sec) {}'.format(self._title)
         metric_id = '{}_{}'.format(self.test_config.name, "time")
-        order_by = '00000003' + str(docsReplicated)
+        order_by = '00000003' + field_length
         metric_info = self._metric_info(title=title, metric_id=metric_id, order_by=order_by)
         replicationTime = round(replicationTime, 3)
         return replicationTime, self._snapshots, metric_info
 
-    def deltasync_throughput(self, throughput: int, docsReplicated: int) -> Metric:
+    def deltasync_throughput(self, throughput: int, field_length: str) -> Metric:
 
         title = 'Throughput (docs/sec) {}'.format(self._title)
         metric_id = '{}_{}'.format(self.test_config.name, "throughput")
-        order_by = '000002' + str(docsReplicated)
+        order_by = '000002' + field_length
         metric_info = self._metric_info(title=title, metric_id=metric_id, order_by=order_by)
 
         return throughput, self._snapshots, metric_info
 
-    def deltasync_bandwidth(self, bandwidth: float, docsReplicated: int) -> Metric:
+    def deltasync_bandwidth(self, bandwidth: float, field_length: str) -> Metric:
 
         title = 'Bandwidth Usage (MB/sec) {}'.format(self._title)
         metric_id = '{}_{}'.format(self.test_config.name, "bandwidth")
-        order_by = '000000004'+str(docsReplicated)
+        order_by = '000000004' + field_length
         metric_info = self._metric_info(title=title, metric_id=metric_id, order_by=order_by)
         return bandwidth, self._snapshots, metric_info
 
-    def deltasync_bytes(self, bytes: float, docsReplicated: int) -> Metric:
+    def deltasync_bytes(self, bytes: float, field_length: str) -> Metric:
 
         title = 'Bytes Transfer (MB) {}'.format(self._title)
         metric_id = '{}_{}'.format(self.test_config.name, "Mbytes")
-        order_by = '00001'+str(docsReplicated)
+        order_by = '00001' + field_length
         metric_info = self._metric_info(title=title, metric_id=metric_id, order_by=order_by)
         bytes = round(((bytes/1024)/1024), 2)  #in MB
         return bytes, self._snapshots, metric_info
