@@ -25,6 +25,8 @@ from perfrunner.helpers.misc import pretty_dict
 from perfrunner.helpers.remote import RemoteHelper
 from perfrunner.helpers.reporter import ShowFastReporter
 from perfrunner.helpers.worker import  WorkerManager
+from perfrunner.helpers.profiler import Profiler, with_profiles
+from perfrunner.helpers.cluster import ClusterManager
 #from perfrunner.helpers.rest import RestHelper
 from perfrunner.helpers.monitor import Monitor
 
@@ -70,8 +72,9 @@ class SGPerfTest(PerfTest):
             self.worker_manager = WorkerManager(cluster_spec, test_config, verbose)
         self.settings = self.test_config.access_settings
         self.settings.syncgateway_settings = self.test_config.syncgateway_settings
-     #   self.rest = RestHelper
+        self.profiler = Profiler(cluster_spec, test_config)
         self.monitor = self.monitor = Monitor(cluster_spec, test_config, verbose)
+        self.cluster = ClusterManager(cluster_spec, test_config)
 
     def download_ycsb(self):
         if self.worker_manager.is_remote:
@@ -261,6 +264,7 @@ class DeltaSync(SGPerfTest):
         local.start_cblitedb(port=port, db_name=db_name)
 
     @with_stats
+    @with_profiles
     def cblite_replicate(self, cblite_db: str):
         if self.test_config.syncgateway_settings.replication_type == 'PUSH':
             str = local.replicate_push(cblite_db=cblite_db)
