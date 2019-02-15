@@ -784,6 +784,7 @@ class SyncgatewaySettings:
     DELTASYNC_CACHEHIT_RATIO = 0
     DOCTYPE = 'simple'
     DOC_DEPTH = '1'
+    REPLICATION_CONCURRENCY = 1
 
     def __init__(self, options: dict):
         self.repo = options.get('ycsb_repo', self.REPO)
@@ -828,6 +829,7 @@ class SyncgatewaySettings:
         self.deltasync_cachehit_ratio = options.get('deltasync_cachehit_ratio', self.DELTASYNC_CACHEHIT_RATIO)
         self.doctype = options.get('doctype', self.DOCTYPE)
         self.doc_depth = options.get('doc_depth', self.DOC_DEPTH)
+        self.replication_concurrency = options.get('replication_concurrency', self.REPLICATION_CONCURRENCY)
 
     def __str__(self) -> str:
         return str(self.__dict_)

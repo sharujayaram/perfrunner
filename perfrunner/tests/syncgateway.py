@@ -440,14 +440,19 @@ class DeltaSync_Parallel(DeltaSync):
     def run(self):
         self.download_ycsb()
         self.start_memcached()
-        db_map = self.generate_dbmap(10)
+
+        num_dbs = int(self.test_config.syncgateway_settings.replication_concurrency)
+
+        db_map = self.generate_dbmap(num_dbs)
         cblite_dbs = self.start_cblite(db_map)
         self.load_docs()
         bytes_transfered_1 = self.get_bytes_transfer()
         self.post_deltastats()
 
         self.run_test()
-        results = self.multiple_replicate(10, cblite_dbs)
+
+        num_agents = len(cblite_dbs)
+        results = self.multiple_replicate(num_agents, cblite_dbs)
 
         if self.check_success(results) == 1:
             print('success')
