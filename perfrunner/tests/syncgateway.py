@@ -4,6 +4,8 @@ import glob
 import copy
 import time
 import re
+from multiprocessing import Pool
+import multiprocessing
 
 from perfrunner.helpers.cbmonitor import with_stats, timeit
 from perfrunner.tests import PerfTest
@@ -357,6 +359,112 @@ class DeltaSync(SGPerfTest):
             throughput = int(docsReplicated/replicationTime)
             field_length = str(self.test_config.syncgateway_settings.fieldlength)
             self.report_kpi(replicationTime, throughput, bandwidth, byte_transfer, field_length)
+
+            self.db_cleanup()
+        else:
+            self.db_cleanup()
+
+
+class DeltaSync_Parallel(DeltaSync):
+
+    def generate_dbmap(self, num_dbs: int):
+        db_map = {}
+        for i in range(num_dbs):
+            port = str(4985 + i)
+            db_name = 'db' + str(i)
+            db_map.update({port: db_name})
+        return db_map
+
+    def start_cblite(self, db_map: map):
+        cblite_dbs = []
+        for key in db_map:
+            local.start_cblitedb(port=key, db_name=db_map[key])
+            cblite_dbs.append(db_map[key])
+        return cblite_dbs
+
+    @with_stats
+    @with_profiles
+    def multiple_replicate(self, num_agents: int, cblite_dbs: list):
+        with Pool(processes=num_agents) as pool:
+            print('starting cb replicate paralell with ', num_agents)
+            results = pool.map(func=self.cblite_replicate, iterable=cblite_dbs)
+        print('end of multiple replicate')
+        return results
+
+    def cblite_replicate(self, cblite_db: str):
+        if self.test_config.syncgateway_settings.replication_type == 'PUSH':
+            str = local.replicate_push(cblite_db=cblite_db)
+        elif self.test_config.syncgateway_settings.replication_type == 'PULL':
+            str = local.replicate_pull(cblite_db=cblite_db)
+
+        if str.find('Completed'):
+            print('cblite message:', str)
+            replicationTime = float((re.search('docs in (.*) secs;', str)).group(1))
+            docsReplicated = int((re.search('Completed (.*) docs in', str)).group(1))
+            if docsReplicated == int(self.test_config.syncgateway_settings.documents):
+                successCode = 'SUCCESS'
+            else:
+                successCode = 'FAILED'
+                print("Replication failed due to partial replication . Number of docs replicated: ", docsReplicated)
+        else:
+            print('Replication failed with error message:', str)
+            replicationTime = 0
+            docsReplicated = 0
+            successCode = 'FAILED'
+        return replicationTime, docsReplicated, successCode
+
+    def get_averagetime(self, results: list):
+        sum = 0
+        for result in results:
+            sum = sum + result[0]
+        average = sum/len(results)
+        return average
+
+    def get_docsReplicated(self, results: list):
+        doc_count = 0
+        for result in results:
+            doc_count = doc_count + result[1]
+        return doc_count
+
+    def check_success(self, results: list):
+        success_count = 0;
+        for result in results:
+            if result[2] == 'SUCCESS':
+                success_count += 1;
+        print('success_count :', success_count)
+        if success_count == len(results):
+            return 1
+        else:
+            return 0
+
+    def run(self):
+        self.download_ycsb()
+        self.start_memcached()
+        db_map = self.generate_dbmap(10)
+        cblite_dbs = self.start_cblite(db_map)
+        self.load_docs()
+        bytes_transfered_1 = self.get_bytes_transfer()
+        self.post_deltastats()
+
+        self.run_test()
+        results = self.multiple_replicate(10, cblite_dbs)
+
+        if self.check_success(results) == 1:
+            print('success')
+            self.post_deltastats()
+            bytes_transfered_2 = self.get_bytes_transfer()
+            byte_transfer = bytes_transfered_2 - bytes_transfered_1
+            averagetime = self.get_averagetime(results)
+
+            docsReplicated = self.get_docsReplicated(results)
+
+            field_length = str(self.test_config.syncgateway_settings.fieldlength)
+
+            throughput = int(docsReplicated / averagetime)
+            bandwidth = self.calc_bandwidth_usage(bytes=byte_transfer, timetaken=averagetime)
+
+            self.report_kpi(averagetime, throughput, bandwidth, byte_transfer, field_length)
+
             self.db_cleanup()
         else:
             self.db_cleanup()
