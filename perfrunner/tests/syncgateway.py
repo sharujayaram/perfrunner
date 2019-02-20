@@ -461,12 +461,16 @@ class DeltaSync_Parallel(DeltaSync):
         db_map = self.generate_dbmap(num_dbs)
         cblite_dbs = self.start_cblite(db_map)
         self.load_docs()
+
+        num_agents = len(cblite_dbs)
+
+        self.multiple_replicate(num_agents, cblite_dbs)
+
         bytes_transfered_1 = self.get_bytes_transfer()
         self.post_deltastats()
 
         self.run_test()
 
-        num_agents = len(cblite_dbs)
         results = self.multiple_replicate(num_agents, cblite_dbs)
 
         if self.check_success(results) == 1:
