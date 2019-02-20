@@ -127,6 +127,16 @@ class SGPerfTest(PerfTest):
     def run_test(self):
         self.run_sg_phase("run test", syncgateway_task_run_test, self.settings, self.settings.time, True)
 
+    def compress_sg_logs(self):
+        self.remote.compress_sg_logs()
+
+    def get_sg_logs(self):
+        initial_nodes = int(self.test_config.syncgateway_settings.nodes)
+        ssh_user, ssh_pass = self.cluster_spec.ssh_credentials
+        for _server in range(initial_nodes):
+            server = self.cluster_spec.servers[_server]
+            local.get_sg_logs(host=server, ssh_user=ssh_user, ssh_pass=ssh_pass)
+
 
     def run(self):
         self.download_ycsb()
@@ -324,6 +334,7 @@ class DeltaSync(SGPerfTest):
         bytes_transfered = self.monitor.deltasync_bytes_transfer(host=sg_server)
         return bytes_transfered
 
+
     def run(self):
         self.download_ycsb()
 
@@ -363,6 +374,8 @@ class DeltaSync(SGPerfTest):
             self.db_cleanup()
         else:
             self.db_cleanup()
+        self.compress_sg_logs()
+        self.get_sg_logs()
 
 
 class DeltaSync_Parallel(DeltaSync):
@@ -443,6 +456,8 @@ class DeltaSync_Parallel(DeltaSync):
 
         num_dbs = int(self.test_config.syncgateway_settings.replication_concurrency)
 
+
+
         db_map = self.generate_dbmap(num_dbs)
         cblite_dbs = self.start_cblite(db_map)
         self.load_docs()
@@ -473,3 +488,5 @@ class DeltaSync_Parallel(DeltaSync):
             self.db_cleanup()
         else:
             self.db_cleanup()
+        self.compress_sg_logs()
+        self.get_sg_logs()

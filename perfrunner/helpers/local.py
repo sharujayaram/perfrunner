@@ -418,6 +418,7 @@ def replicate_pull(cblite_db: str):
     with quiet():
         return local(cmd, capture=True)
 
+
 def cleanup_cblite_db():
     print("cleaning up cblite db")
     cmd = 'rm -rf db*'
@@ -440,3 +441,6 @@ def build_cblite():
     cmd = 'CC=clang CXX=clang++ ./build.sh'
     with lcd('/root/cblite/cblite/'):
         local(cmd)
+
+def get_sg_logs(host: str, ssh_user: str, ssh_pass: str):
+    os.system('sshpass -p {} scp {}@{}:/home/sync_gateway/*logs.tar.gz ./'.format(ssh_pass, ssh_user, host))
