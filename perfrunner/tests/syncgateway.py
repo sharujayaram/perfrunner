@@ -388,7 +388,7 @@ class DeltaSync_Parallel(DeltaSync):
             db_map.update({port: db_name})
         return db_map
 
-    def start_cblite(self, db_map: map):
+    def start_multiplecblite(self, db_map: map):
         cblite_dbs = []
         for key in db_map:
             local.start_cblitedb(port=key, db_name=db_map[key])
@@ -459,8 +459,15 @@ class DeltaSync_Parallel(DeltaSync):
 
 
         db_map = self.generate_dbmap(num_dbs)
-        cblite_dbs = self.start_cblite(db_map)
+        cblite_dbs = self.start_multiplecblite(db_map)
+
+        if self.test_config.syncgateway_settings.deltasync_cachehit_ratio == '100':
+            self.start_cblite(port='4983', db_name='db')
+
         self.load_docs()
+
+        if self.test_config.syncgateway_settings.deltasync_cachehit_ratio == '100':
+            self.cblite_replicate(cblite_db='db')
 
         num_agents = len(cblite_dbs)
 
@@ -470,6 +477,10 @@ class DeltaSync_Parallel(DeltaSync):
         self.post_deltastats()
 
         self.run_test()
+
+        if self.test_config.syncgateway_settings.deltasync_cachehit_ratio == '100':
+            self.cblite_replicate(cblite_db='db')
+            bytes_transfered_1 = self.get_bytes_transfer()
 
         results = self.multiple_replicate(num_agents, cblite_dbs)
 
