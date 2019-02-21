@@ -47,3 +47,4 @@ replication_type = PULL
 writeallfields = false
 updatefieldcount = 1
 replication_concurrency = 50
+deltasync_cachehit_ratio = 100
