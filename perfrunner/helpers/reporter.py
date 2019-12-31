@@ -61,10 +61,14 @@ class ShowFastReporter(Reporter):
             if self.sdk_type == 'java':
                 self.sdk_version = self.test_config.ycsb_settings.sdk_version
             elif self.sdk_type == 'libc':
+                print('sdk_version:', self.sdk_version)
+                print('sdk_type', self.sdk_type)
                 self.sdk_version = self.test_config.client_settings.libcouchbase
             elif self.sdk_type == 'python':
                 self.sdk_version = self.test_config.client_settings.python_client
 
+            print('sdk_version:', self.sdk_version)
+            print('sdk_type', self.sdk_type)
             self.build = self.sdk_version + ' : ' + self.build
 
         if self.test_config.access_settings.show_tls_version:
