@@ -3,13 +3,12 @@ import os
 import shutil
 import time
 
+from fabric.api import cd, run
+
 from logger import logger
-from perfrunner.helpers import local
-from perfrunner.helpers.cbmonitor import with_stats
-from perfrunner.helpers.profiler import with_profiles
 from perfrunner.helpers.worker import ycsb_data_load_task, ycsb_task
 from perfrunner.tests import PerfTest
-from perfrunner.tests.n1ql import N1QLTest
+from perfrunner.remote.context import all_servers
 
 from perfrunner.helpers import local
 from perfrunner.helpers.cluster import ClusterManager
@@ -19,7 +18,6 @@ from perfrunner.helpers.misc import pretty_dict, read_json
 from perfrunner.helpers.monitor import Monitor
 from perfrunner.helpers.profiler import Profiler
 from perfrunner.helpers.remote import RemoteHelper
-from perfrunner.helpers.reporter import ShowFastReporter
 from perfrunner.helpers.rest import RestHelper
 from perfrunner.helpers.worker import  WorkerManager
 from perfrunner.settings import (
@@ -136,6 +134,55 @@ class MongoTest(PerfTest):
                         break
         return throughput
 
+    def parse_ycsb_latency(self, percentile: str) -> int:
+        lat_dic = {}
+        _temp = []
+        _fc = 1
+        ycsb_log_files = [filename
+                          for filename in glob.glob("YCSB/ycsb_run_*.log")
+                          if "stderr" not in filename]
+        for filename in ycsb_log_files:
+            fh2 = open(filename)
+            _l1 = fh2.readlines()
+            _l1_len = len(_l1)
+            fh = open(filename)
+            _c = 0
+            for x in range(_l1_len - 1):
+                line = fh.readline()
+                if line.find('], 1000,') >= 1:
+                    io_type = line.split('[')[1].split(']')[0]
+                    _n = 0
+                    while (line.startswith('[{}]'.format(io_type))):
+                        lat = float(line.split()[-1])
+                        _temp.append(lat)
+                        line = fh.readline()
+                        _n += 1
+                    _temp.sort()
+                    if "FAILED" not in io_type:
+                        lat_dic = self._ycsb_perc_calc(_temp=_temp,
+                                                       io_type=io_type,
+                                                       lat_dic=lat_dic,
+                                                       _fc=_fc,
+                                                       percentile=percentile)
+                        lat_dic = self._ycsb_avg_calc(_temp=_temp,
+                                                      io_type=io_type,
+                                                      lat_dic=lat_dic,
+                                                      _fc=_fc)
+                    _temp.clear()
+                    _c += _n
+                _c += 1
+                x += _c
+            _fc += 1
+        if 'CLEANUP' in lat_dic:
+            del lat_dic['CLEANUP']
+        return lat_dic
+
+    @all_servers
+    def kill_mongo_services(self):
+        run('service mongod stop')
+        run('killall mongod')
+        run('killall mongos')
+
     def run(self):
         print('entered mongoTest')
 
@@ -148,7 +195,12 @@ class MongoTest(PerfTest):
         self.collect_export_files()
 
         throughput = self.parse_ycsb_throughput()
-        print(throughput)
+        print('Average Throughput :', throughput)
+
+        latency = self.parse_ycsb_latency()
+        print('Latency : ', latency)
+
+        self.kill_mongo_services()
 
         self.remote.flush_iptables()
         self.tear_down()

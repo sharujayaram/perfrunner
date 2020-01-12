@@ -2,6 +2,7 @@ from argparse import ArgumentParser
 
 from fabric.api import cd, run
 
+from perfrunner.helpers.cluster import ClusterManager
 from perfrunner.helpers.remote import RemoteHelper
 from perfrunner.remote.context import all_servers, \
     mongod_master, mongod_servers, mongos_servers, mongos_master, all_clients
@@ -16,6 +17,7 @@ class MongoInstaller:
         self.client_settings = self.test_config.client_settings.__dict__
         self.options = options
         self.remote = RemoteHelper(self.cluster_spec, options.verbose)
+        self.cluster = ClusterManager(self.cluster_spec, self.test_config)
 
     @all_servers
     def cloning_napatools(self):
@@ -109,7 +111,6 @@ class MongoInstaller:
             print('adding shard on 190')
             run('python mongos_addshard_master.py')
 
-
 def get_args():
     parser = ArgumentParser()
 
@@ -138,6 +139,16 @@ def main():
     test_config.parse(args.test_config_fname, override=args.override)
 
     mongo = MongoInstaller(cluster_spec, test_config, args)
+
+
+    mongo.cluster.disable_wan()
+    mongo.cluster.tune_memory_settings()
+    mongo.cluster.throttle_cpu()
+    mongo.cluster.enable_ipv6()
+    mongo.cluster.flush_iptables()
+
+
+
     mongo.cloning_napatools()
     mongo.runSetupShell()
     mongo.configServerReplicaSet()
