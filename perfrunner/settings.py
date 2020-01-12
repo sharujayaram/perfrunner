@@ -151,6 +151,14 @@ class ClusterSpec(Config):
     def parameters(self) -> dict:
         return self._get_options_as_dict('parameters')
 
+    @property
+    def mongodnodes(self) -> List[str]:
+        return self.config.get('mongod', 'hosts').split()
+
+    @property
+    def mongosnodes(self) -> List[str]:
+        return self.config.get('mongos', 'hosts').split()
+
 
 class TestCaseSettings:
 
@@ -493,6 +501,13 @@ class PhaseSettings:
 
     REQUESTDISTRIBUTION = 'zipfian'
 
+
+    MONGO_WRITECONCERN = 'errors_ignored'
+
+    MONGO_READPREFERENCE = 'primary'
+
+    MONGO_WRITECONCERN_JOURNAL = 'false'
+
     def __init__(self, options: dict):
         # Common settings
         self.time = int(options.get('time', self.TIME))
@@ -653,6 +668,12 @@ class PhaseSettings:
 
         self.ycsb_jvm_args = options.get('ycsb_jvm_args', self.YCSB_JVM_ARGS)
         self.tpcds_scale_factor = int(options.get('tpcds_scale_factor', self.TPCDS_SCALE_FACTOR))
+
+        # mongodb durability
+        self.mongo_writeconcern = options.get('mongo_writeconcern', self.MONGO_WRITECONCERN)
+        self.mongo_readpreference = options.get('mongo_readpreferece', self.MONGO_READPREFERENCE)
+        self.mongo_writeconcern_journal = options.get('mongo_writeconcern_journal',
+                                                      self.MONGO_WRITECONCERN_JOURNAL)
 
     def __str__(self) -> str:
         return str(self.__dict__)

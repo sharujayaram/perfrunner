@@ -411,6 +411,9 @@ def run_ycsb(host: str,
              transactionupdateproportion: str,
              transactioninsertproportion: str,
              requestdistribution: str,
+             mongo_writeconcern_journal: str,
+             mongo_writeconcern: str,
+             mongo_readpreference: str,
              ssl_keystore_file: str ='',
              ssl_keystore_password: str = '',
              ssl_mode: str = 'none',
@@ -465,6 +468,10 @@ def run_ycsb(host: str,
     if enable_mutation_token is not None:
         cmd += '-p couchbase.enableMutationToken={enable_mutation_token} '
 
+    if ycsb_client == 'mongodb':
+        cmd += ' -p mongodb.url=mongodb://172.23.100.125:27021,172.23.100.126:27021,' \
+               '172.23.100.127:27021,172.23.100.128:27021/ycsb'
+
     if ops is not None:
         cmd += ' -p operationcount={ops} '
     if execution_time is not None:
@@ -473,12 +480,20 @@ def run_ycsb(host: str,
         cmd += '-p measurementtype=timeseries '
 
     if transactionsenabled:
-        cmd += ' -p couchbase.transactionsEnabled=true '
-        cmd += ' -p couchbase.atrs={num_atrs} '
-        cmd += ' -p documentsintransaction={documentsintransaction} '
+
+        if ycsb_client == 'mongodb':
+            cmd += ' -p mongo.transactionsEnabled=true '
+            cmd += ' -p mongodb.writeConcern={mongo_writeconcern} '
+            cmd += ' -p mongodb.readPreference={mongo_readpreference} '
+            cmd += ' -p mongodb.journal={mongo_writeconcern_journal} '
+        else:
+            cmd += ' -p couchbase.transactionsEnabled=true '
+            cmd += ' -p couchbase.atrs={num_atrs} '
+
+        cmd += ' -p transactioninsertproportion={transactioninsertproportion} '
         cmd += ' -p transactionreadproportion={transactionreadproportion} '
         cmd += ' -p transactionupdateproportion={transactionupdateproportion} '
-        cmd += ' -p transactioninsertproportion={transactioninsertproportion} '
+        cmd += ' -p documentsintransaction={documentsintransaction} '
 
     if ycsb_jvm_args is not None:
         cmd += ' -jvm-args=\'{ycsb_jvm_args}\' '
@@ -499,6 +514,9 @@ def run_ycsb(host: str,
                      transactionupdateproportion=transactionupdateproportion,
                      transactioninsertproportion=transactioninsertproportion,
                      requestdistribution=requestdistribution,
+                     mongo_writeconcern_journal=mongo_writeconcern_journal,
+                     mongo_writeconcern=mongo_writeconcern,
+                     mongo_readpreference=mongo_readpreference,
                      boost=boost,
                      persist_to=persist_to,
                      replicate_to=replicate_to,

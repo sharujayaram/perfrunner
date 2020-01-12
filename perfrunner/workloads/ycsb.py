@@ -40,6 +40,9 @@ def ycsb_data_load(workload_settings: PhaseSettings,
              transactionupdateproportion=workload_settings.transactionupdateproportion,
              transactioninsertproportion=workload_settings.transactioninsertproportion,
              requestdistribution=workload_settings.requestdistribution,
+             mongo_writeconcern_journal=workload_settings.mongo_writeconcern_journal,
+             mongo_writeconcern=workload_settings.mongo_writeconcern,
+             mongo_readpreference=workload_settings.mongo_readpreference,
              num_atrs=workload_settings.num_atrs,
              ycsb_jvm_args=workload_settings.ycsb_jvm_args)
 
@@ -92,5 +95,8 @@ def ycsb_workload(workload_settings: PhaseSettings,
              transactionupdateproportion=workload_settings.transactionupdateproportion,
              transactioninsertproportion=workload_settings.transactioninsertproportion,
              requestdistribution=workload_settings.requestdistribution,
+             mongo_writeconcern_journal=workload_settings.mongo_writeconcern_journal,
+             mongo_writeconcern=workload_settings.mongo_writeconcern,
+             mongo_readpreference=workload_settings.mongo_readpreference,
              num_atrs=workload_settings.num_atrs,
              ycsb_jvm_args=workload_settings.ycsb_jvm_args)
