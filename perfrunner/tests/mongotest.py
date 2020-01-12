@@ -139,13 +139,13 @@ class MongoTest(PerfTest):
     def run(self):
         print('entered mongoTest')
 
-        #self.download_ycsb()
+        self.download_ycsb()
 
-        #self.load()
+        self.load()
 
-        #self.access()
+        self.access()
 
-        #self.collect_export_files()
+        self.collect_export_files()
 
         throughput = self.parse_ycsb_throughput()
         print(throughput)
