@@ -2,25 +2,35 @@
 test = perfrunner.tests.mongotest.MongoTest
 
 [showfast]
-title = Avg Throughput (ops/sec), Workload A, 3 nodes
+title = Avg Throughput (ops/sec), Workload A, 4 nodes
 component = kv
 category = ycsb
 
 [cluster]
 mem_quota = 40960
-initial_nodes = 3
+initial_nodes = 4
 num_buckets = 1
+online_cores = 24
 
 [load]
 workload_path = workloads/workloada
+ycsb_client = mongodb
 items = 20000000
-workers = 160
+workers = 20
 
 [access]
-workload_path = workloads/workloada
+workload_path = workloads/workloadta
+ycsb_client = mongodb
 items = 20000000
 ops = 1000000000
-time = 1800
+time = 600
 boost = 12
-workers = 96
+workers = 80
 workload_instances = 6
+transactionsenabled = 1
+mongo_writeconcern = majority
+mongo_readpreference = secondary_preferred
+mongo_writeconcern_journal = true
+
+[ycsb]
+branch = couchbase3-transactions-playground
