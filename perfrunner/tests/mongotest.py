@@ -65,6 +65,7 @@ class MongoTest(PerfTest):
         if exc_type == KeyboardInterrupt:
             logger.warn('The test was interrupted')
             return True
+        self.kill_mongo_services()
 
     def download_ycsb(self):
         if self.worker_manager.is_remote:
@@ -197,7 +198,7 @@ class MongoTest(PerfTest):
         throughput = self.parse_ycsb_throughput()
         print('Average Throughput :', throughput)
 
-        latency = self.parse_ycsb_latency()
+        latency = self.parse_ycsb_latency(percentile='95')
         print('Latency : ', latency)
 
         self.kill_mongo_services()
