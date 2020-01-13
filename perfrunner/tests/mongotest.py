@@ -180,9 +180,9 @@ class MongoTest(PerfTest):
 
     @all_servers
     def kill_mongo_services(self):
-        run('service mongod stop')
-        run('killall mongod')
-        run('killall mongos')
+        run('service mongod stop', quiet=True)
+        run('killall mongod', quiet=True)
+        run('killall mongos', quiet=True)
 
     def run(self):
         print('entered mongoTest')
