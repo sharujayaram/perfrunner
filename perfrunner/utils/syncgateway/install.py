@@ -19,19 +19,19 @@ def main():
             _uninstall = True
 
     if re.match('2.0.0', _build):
-        base_url = "http://172.23.120.24/builds/releases/mobile/couchbase-sync-gateway/2.0.0"
+        base_url = "http://172.23.126.166/builds/releases/mobile/couchbase-sync-gateway/2.0.0"
         sg_package_name = "couchbase-sync-gateway-enterprise_{}_x86_64.rpm".format(_build)
         accel_package_name = "couchbase-sg-accel-enterprise_{}_x86_64.rpm".format(_build)
     elif re.match('2.1.0', _build):
-        base_url = "http://172.23.120.24/builds/releases/mobile/couchbase-sync-gateway/2.1.0"
+        base_url = "http://172.23.126.166/builds/releases/mobile/couchbase-sync-gateway/2.1.0"
         sg_package_name = "couchbase-sync-gateway-enterprise_{}_x86_64.rpm".format(_build)
         accel_package_name = "couchbase-sg-accel-enterprise_{}_x86_64.rpm".format(_build)
     elif re.match('2.1.1', _build):
-        base_url = "http://172.23.120.24/builds/releases/mobile/couchbase-sync-gateway/2.1.1"
+        base_url = "http://172.23.126.166/builds/releases/mobile/couchbase-sync-gateway/2.1.1"
         sg_package_name = "couchbase-sync-gateway-enterprise_{}_x86_64.rpm".format(_build)
         accel_package_name = "couchbase-sg-accel-enterprise_{}_x86_64.rpm".format(_build)
     elif re.match('1.5.1', _build):
-        base_url = "http://172.23.120.24/builds/releases/mobile/couchbase-sync-gateway/1.5.1"
+        base_url = "http://172.23.126.166/builds/releases/mobile/couchbase-sync-gateway/1.5.1"
         sg_package_name = "couchbase-sync-gateway-enterprise_{}_x86_64.rpm".format(_build)
         accel_package_name = "couchbase-sg-accel-enterprise_{}_x86_64.rpm".format(_build)
     elif 'toy' in _build:
@@ -42,7 +42,7 @@ def main():
         accel_package_name = "couchbase-sg-accel-enterprise_{}_x86_64.rpm".format(_build)
     else:
         v, b = _build.split("-")
-        base_url = "http://172.23.120.24/builds/latestbuilds/sync_gateway/{}/{}".format(v, b)
+        base_url = "http://172.23.126.166/builds/latestbuilds/sync_gateway/{}/{}".format(v, b)
         sg_package_name = "couchbase-sync-gateway-enterprise_{}_x86_64.rpm".format(_build)
         accel_package_name = "couchbase-sg-accel-enterprise_{}_x86_64.rpm".format(_build)
 
