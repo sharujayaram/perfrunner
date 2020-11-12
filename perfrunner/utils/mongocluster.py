@@ -28,7 +28,7 @@ class MongoInstaller:
         napatools_branch = self.test_config.napatools_setting.napatools_branch
 
         with cd('mongotesting'):
-            run('git clone -q -b {} https://github.com/sharujayaram/napatools.git', shell=False).format(napatools_branch)
+            run('git clone -q -b {} https://github.com/sharujayaram/napatools.git'.format(napatools_branch), shell=False)
 
     @all_servers
     def runSetupShell(self):
