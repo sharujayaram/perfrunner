@@ -1080,6 +1080,17 @@ class ClientSettings:
         return str(self.__dict__)
 
 
+class NapaToolsSettings:
+
+    NAPATOOLS_BRANCH = 'soe2_hercules'
+
+    def __init__(self, options: dict):
+        self.napatools_branch = options.get('napatools_branch', self.NAPATOOLS_BRANCH)
+
+    def __str__(self) -> str:
+        return str(self.__dict__)
+
+
 class JavaDCPSettings:
 
     REPO = 'git://github.com/couchbase/java-dcp-client.git'
@@ -1352,6 +1363,11 @@ class TestConfig(Config):
     def java_dcp_settings(self) -> JavaDCPSettings:
         options = self._get_options_as_dict('java_dcp')
         return JavaDCPSettings(options)
+
+    @property
+    def napatools_setting(self) -> NapaToolsSettings:
+        options = self._get_options_as_dict('napatools_setting')
+        return NapaToolsSettings(options)
 
     @property
     def client_settings(self) -> ClientSettings:

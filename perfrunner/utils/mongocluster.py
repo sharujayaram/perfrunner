@@ -24,8 +24,11 @@ class MongoInstaller:
         print('entered cloning')
         run('rm -rf mongotesting')
         run('mkdir mongotesting')
+
+        napatools_branch = self.test_config.napatools_setting.napatools_branch
+
         with cd('mongotesting'):
-            run('git clone -q -b soe2_hercules https://github.com/sharujayaram/napatools.git', shell=False)
+            run('git clone -q -b {} https://github.com/sharujayaram/napatools.git', shell=False).format(napatools_branch)
 
     @all_servers
     def runSetupShell(self):
