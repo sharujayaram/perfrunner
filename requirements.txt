@@ -19,7 +19,6 @@ pep8-naming==0.4.1
 psutil==5.2.2
 pydocstyle==2.0.0
 pycrypto==2.6.1
-pyYAML==3.12
 requests==2.1.0
 setuptools==49.0.0
 sqlalchemy==1.1.7
