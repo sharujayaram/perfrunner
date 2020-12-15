@@ -82,7 +82,7 @@ class MongoInstaller:
             print('initiating  shard replicaset on 204')
             run('python init_shard_replicaset_204.py')
 
-    @mongod_servers
+    @mongod_master
     def initReplicaset(self):
         with cd('/root/mongotesting/napatools/mongotools/mongo42-ent-2replicas'):
             print('initiating  shard replicaset on 204')
@@ -154,16 +154,16 @@ def main():
 
     mongo.cloning_napatools()
     mongo.runSetupShell()
-    mongo.configServerReplicaSet()
-    mongo.initConfigServReplicasetMaster()
+    #mongo.configServerReplicaSet()
+    #mongo.initConfigServReplicasetMaster()
 
     mongo.createReplicaSet()
 
     mongo.initReplicaset()
 
-    mongo.run_mongos_config()
+    #mongo.run_mongos_config()
 
-    mongo.mongos_addshard_master()
+    #mongo.mongos_addshard_master()
 
 
 if __name__ == '__main__':
