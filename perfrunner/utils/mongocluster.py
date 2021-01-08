@@ -163,7 +163,7 @@ def main():
 
     mongo.run_mongos_config()
 
-    mongo.mongos_addshard_master()
+    #mongo.mongos_addshard_master()
 
 
 if __name__ == '__main__':
